@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <audio autoplay muted controls #audioCtr></audio>
+        </div>
+        <div class="col-md-6">
+            <a #ankorTag></a>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn" [ngClass]="isAudioMute ===! true ? 'btn-primary' : 'btn-danger'" 
+                (click)="MuteUnmute()"><i [ngClass]="btnMuteUnmute"></i></button>
+                <button class="btn btn-success" (click)="StartRecording()" *ngIf="!isRecording">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="btn btn-danger" (click)="StopRecording()" *ngIf="isRecording">
+                    <i class="fas fa-stop"></i>
+                </button>
+                <button class="btn btn-secondary" (click)="PauseRecording()" *ngIf="isResume && isRecording">
+                    <i class="fas fa-pause"></i>
+                </button>
+                <button class="btn btn-secondary" (click)="ResumeRecording()" *ngIf="!isResume && isRecording">
+                    <i class="fas fa-play"></i>
+                </button>
+              </div>
+        </div>
+    </div>
+    </div>

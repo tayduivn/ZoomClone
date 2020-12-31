@@ -1,0 +1,6 @@
+<div class="container">
+<input type="number" [(ngModel)]='width'/>
+<button class="btn btn-primary" type="button" (click)="ngOnDestroy()">Set</button>
+<p>{{width}}</p>
+<h2 [ngClass]="this.btnScreenShareColor">{{this.btnScreenShare}}</h2>
+</div>
