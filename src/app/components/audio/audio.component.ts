@@ -19,10 +19,12 @@ export class AudioComponent implements AfterViewInit {
   public isResume: boolean = true;
   constructor(private ngZone: NgZone) { }
   ngAfterViewInit(): void {
-    //this.startWithAudio();
+    this.startWithAudio();
+    // this.audioCtr.nativeElement.onplay(e =>{
+    //   console.log(e);
+    // });
   }
   StartRecording(){
-    this.startWithAudio();
     this.isRecording = true;
     if(this._myMediaStream == undefined){
       return;
@@ -31,10 +33,19 @@ export class AudioComponent implements AfterViewInit {
     this._mediaRecorder.start(1000);
   }
   ResumeRecording(){
+    debugger;
+    if(this._mediaRecorder.state == "inactive"){
+      this._mediaRecorder.start();
+      return;
+    }
     this.isResume = true;
     this._mediaRecorder.resume();
   }
   PauseRecording(){
+    debugger;
+    if(this._mediaRecorder.state == "inactive"){
+      return;
+    }
     this.isResume = false;
     this._mediaRecorder.pause();
   }
@@ -72,7 +83,7 @@ export class AudioComponent implements AfterViewInit {
         });
       };
       this.audioCtr.nativeElement.srcObject = stream;
-      //this.setupMediaRecorder(stream);
+      this.setupMediaRecorder(stream);
     })
     .catch(error => {
       alert(error);

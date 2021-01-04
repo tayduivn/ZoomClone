@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Directive, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +32,9 @@ export class geo{
 
 @Directive()
 export class BaseCrudApi<T>{
+  public httpErrorResponse!: HttpErrorResponse;
   public unsubscribe$ = new Subject<void>();
-  isLoading: boolean = false;
-  items: T[] = [];
+  public isLoading: boolean = false;
+  public isError: boolean = false;
+  public items: T[] = [];
 }
