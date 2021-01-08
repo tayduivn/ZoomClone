@@ -1,14 +1,19 @@
 <div class="container">
-    <h1>Answer</h1>
-        <div class="form-row align-items-center">
-          <div class="col-auto">
-            <input type="text" class="form-control mb-2" [(ngModel)]="VarAnswer">
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-2" (click)="setOfferr()">Set</button>
-          </div>
-        </div>
-    <ul>
-        <li>Answer: {{Answer}}</li>
-    </ul>
+  <h1 *ngIf="issendChannelConnectionOpen">Hello</h1>
+  <div class="form-group">
+    <label placeholder="Press Start, enter some text, then press Send.">
+      Sending
+    </label>
+    <textarea class="form-control" #sendingTextt rows="1"></textarea>
+  </div>
+  <div class="form-group">
+    <label> Receiving </label>
+    <textarea class="form-control" #receivingTextt rows="1"></textarea>
+  </div>
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-success" (click)="createConnection()">Start</button>
+    <button type="button" class="btn btn-secondary" (click)="sendData()">Send as Sender</button>
+    <button type="button" class="btn btn-secondary" (click)="SendReceiveData()">Send as Receiver</button>
+    <button type="button" class="btn btn-danger" (click)="closeDataChannels()">Stop</button>
+  </div>
 </div>

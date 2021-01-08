@@ -11,7 +11,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AboutComponent } from "./components/about/AboutComponent";
 import { ContactComponent } from './components/contact/contact.component';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebRTCService } from './services/web-rtc.service';
 import { AudioComponent } from './components/audio/audio.component';
 import { UserComponent } from './components/user/user.component';
@@ -37,8 +37,9 @@ import { AnswerComponent } from './components/answer/answer.component';
     LoadingBarRouterModule,
     LoadingBarHttpClientModule,
     AppRoutingModule,
-    AdminModule,
     FormsModule,
+    ReactiveFormsModule,
+    AdminModule,
     HttpClientModule,
     LoggerModule.forRoot({
     serverLoggingUrl: '/api/logs', 
@@ -46,7 +47,11 @@ import { AnswerComponent } from './components/answer/answer.component';
     serverLogLevel: NgxLoggerLevel.ERROR
   })
   ],
-  providers: [WebRTCService],
+  exports:[
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  providers: [ WebRTCService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

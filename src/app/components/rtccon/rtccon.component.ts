@@ -22,6 +22,7 @@ export class RtcconComponent implements OnInit {
    ngOnInit(): void {
     this.rtc = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
     this.dc = this.rtc.createDataChannel("channel");
+    this.rtc.ondatachannel = this.ondatachannel;
     this.createOffer();
     this.dc.onmessage = this.onmessage;
     this.dc.onopen = this.onopen;
@@ -61,6 +62,9 @@ export class RtcconComponent implements OnInit {
   }
   public gotRemoteStream(Event: any){
     console.log("ontrack");
+  }
+  public ondatachannel(event: any){
+    console.log(event +" OnDataChannel");
   }
   public onIceCandidate(event: RTCPeerConnectionIceEvent){
     console.log("onIceCandidate " + JSON.stringify(event));

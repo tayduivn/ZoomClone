@@ -1,3 +1,4 @@
+import { CounterComponent } from './aaa/counter/counter.component';
 import { AnswerComponent } from './components/answer/answer.component';
 import { RtcconComponent } from './components/rtccon/rtccon.component';
 import { UserComponent } from './components/user/user.component';
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'Audio' , component: AudioComponent },
   { path: 'RTC' , component: RtcconComponent },
   { path: 'Answer' , component: AnswerComponent },
+  { path: 'Login' , component: CounterComponent },
   { path: 'User' , 
     component: UserComponent,
     // resolve: {
