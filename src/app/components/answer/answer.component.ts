@@ -54,22 +54,22 @@ export class AnswerComponent implements OnInit , AfterViewInit {
     // this.rtc.ondatachannel = this.ondatachannel;
   }
   ngAfterViewInit() {
-    const mediaDevices = navigator.mediaDevices as any;
-    window.localPeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
+    // const mediaDevices = navigator.mediaDevices as any;
+    //window.localPeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
 
-    this.Trace("Created Local Peer Connection Object localPeerConnection");
-    var sc_stream = mediaDevices.getUserMedia({ video: true, audio:  true })
-    .then((stream: MediaStream) => {
-      // stream.getTracks().forEach((track: MediaStreamTrack) => {
-      //   debugger;
-      //   window.localPeerConnection.addTrack(track);
-      // });
-      window.localPeerConnection.addTrack(stream.getVideoTracks()[0], stream);
-      this.localvid.nativeElement.srcObject = stream;
-      this.localvid.nativeElement.play();
-    });
-    debugger;
-    console.log(sc_stream);
+    // this.Trace("Created Local Peer Connection Object localPeerConnection");
+    // var sc_stream = mediaDevices.getUserMedia({ video: true, audio:  true })
+    // .then((stream: MediaStream) => {
+    //   // stream.getTracks().forEach((track: MediaStreamTrack) => {
+    //   //   debugger;
+    //   //   window.localPeerConnection.addTrack(track);
+    //   // });
+    //   window.localPeerConnection.addTrack(stream.getVideoTracks()[0], stream);
+    //   this.localvid.nativeElement.srcObject = stream;
+    //   this.localvid.nativeElement.play();
+    // });
+    //debugger;
+    //console.log(sc_stream);
   }
   public Trace(text: string){
     console.log((performance.now() / 1000).toFixed(3) + ": " + text);
@@ -77,29 +77,33 @@ export class AnswerComponent implements OnInit , AfterViewInit {
   createConnection(): void{
     debugger;
     // ? Local
-    // try{
-    //window.sendChannel = window.localPeerConnection?.createDataChannel("sendDataChannel");
-    //this.Trace("Created send data channel");
-    // }catch(e){
-    //   alert('Failed to create data channel. ' +
-    //   'You need Chrome M25 or later with RtpDataChannel enabled');
-    //   this.Trace("createDataChannel() failed with exception: " + e.message);
-    // }
+     try{
+    window.localPeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
+    window.sendChannel = window.localPeerConnection?.createDataChannel("sendDataChannel");
+    this.Trace("Created send data channel");
+     }catch(e){
+       alert('Failed to create data channel. ' +
+       'You need Chrome M25 or later with RtpDataChannel enabled');
+       this.Trace("createDataChannel() failed with exception: " + e.message);
+     }
     window.localPeerConnection.onicecandidate = this.gotLocalCandidate;
-    //window.sendChannel.onmessage = this.handleLocalMessage;
-    //window.sendChannel.onopen = this.handleSendChannelStateChange;
-    //window.sendChannel.onclose = this.handleSendChannelStateChange;
+    window.sendChannel.onmessage = this.handleLocalMessage;
+    window.sendChannel.onopen = this.handleSendChannelStateChange;
+    window.sendChannel.onclose = this.handleSendChannelStateChange;
     window.localPeerConnection.oniceconnectionstatechange = this.Localoniceconnectionstatechange;
     // ? Remote
     window.remotePeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
     console.log("Created Remote Peer Connection Object remotePeerConnection");
     window.remotePeerConnection.ontrack = this.onremotetrack;
     window.remotePeerConnection.onicecandidate = this.gotRemoteIceCandidate;
-    //window.remotePeerConnection.ondatachannel = this.gotReceiveChannel;
+    window.remotePeerConnection.ondatachannel = this.gotReceiveChannel;
     window.remotePeerConnection.oniceconnectionstatechange = this.Remoteoniceconnectionstatechange;
 
     window.localPeerConnection.createOffer()
-    .then(LD => this.gotLocalDescription(LD))
+    .then(LD => {
+      console.log(`Local Description OR Offer: ${JSON.stringify(LD)}`);
+      this.gotLocalDescription(LD)
+    })
     .catch(err => this.Trace("Error: " + err));
   }
   onremotetrack(data: RTCTrackEvent){
@@ -146,6 +150,10 @@ export class AnswerComponent implements OnInit , AfterViewInit {
       window.localPeerConnection?.addIceCandidate(event.candidate);
       console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
     }
+    if(event.target.iceGatheringState == "complete"){
+      // ! Create Offer and send to server or other peer
+      console.log("Remote Candidate iceGatheringState: " + event.target.iceGatheringState);
+    }
   }
   gotReceiveChannel(event: RTCDataChannelEvent){
     debugger;
@@ -154,9 +162,6 @@ export class AnswerComponent implements OnInit , AfterViewInit {
     //   debugger;
     //   if(message.data instanceof Blob) {} else {}
     //   console.log("Remote Message: " + message.data);
-    // });
-    // window.receiveChannel.addEventListener("message", function(message: MessageEvent<any>){
-    //   alert("Received Data: " + message.data);
     // });
     window.receiveChannel.addEventListener("message",function(e){
       debugger;
@@ -215,16 +220,19 @@ export class AnswerComponent implements OnInit , AfterViewInit {
   gotLocalDescription(desc: any){
     debugger;
     window.localPeerConnection?.setLocalDescription(desc);
-    console.log('Offer from LocalPeerConnection \n' + desc.sdp);
+    console.log('Offer from LocalPeerConnection \n' + JSON.stringify(desc.sdp));
     window.remotePeerConnection.setRemoteDescription(desc);
     window.remotePeerConnection?.createAnswer()
-    .then(RD => this.gotRemoteDescription(RD))
+    .then(RD => {
+      console.log(`Remote Description OR Answer: ${JSON.stringify(RD)}`);
+      this.gotRemoteDescription(RD)
+    })
     .catch(err => this.Trace("Error: " + err));
   }
   gotRemoteDescription(desc: any){
     debugger;
     window.remotePeerConnection?.setLocalDescription(desc);
-    console.log('Answer from remotePeerConnection \n' + desc.sdp);
+    console.log('Answer from remotePeerConnection \n' + JSON.stringify(desc.sdp));
     window.localPeerConnection?.setRemoteDescription(desc);
 
   }
