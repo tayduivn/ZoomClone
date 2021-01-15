@@ -1,4 +1,6 @@
 <div class="container">
+  <video #localvid autoplay muted></video>
+  <video #remotevid autoplay muted id="remoteid"></video>
   <h1 *ngIf="issendChannelConnectionOpen">Hello</h1>
   <div class="form-group">
     <label placeholder="Press Start, enter some text, then press Send.">

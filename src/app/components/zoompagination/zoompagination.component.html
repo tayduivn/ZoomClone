@@ -1,0 +1,7 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item" *ngIf="pager.currentPage > 1"><a class="page-link" (click)="getByPager(pager.currentPage - 1)">Previous</a></li>
+      <li class="page-item {{ pager.currentPage ==  p ? 'active' : ''}}" *ngFor="let p of myNumbers"><a class="page-link" (click)="getByPager(p)">{{p}}</a></li>
+      <li class="page-item" *ngIf="pager.currentPage < pager.totalPages"><a class="page-link" (click)="getByPager(pager.currentPage + 1)">Next</a></li>
+    </ul>
+  </nav>

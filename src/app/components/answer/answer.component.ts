@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 //RTCConfiguration
 const PEER_CONNECTION_CONFIG: any = {
   iceServers: [
@@ -15,6 +15,9 @@ var d: RTCSessionDescriptionInit = {
   sdp: '',
   type: "offer"
 };
+function cll(){
+  return document.getElementById("remoteid");
+}
 declare global {
   interface Window {
     localPeerConnection: RTCPeerConnection;
@@ -28,18 +31,21 @@ declare global {
   templateUrl: './answer.component.html',
   styleUrls: ['./answer.component.css']
 })
-export class AnswerComponent implements OnInit {
+export class AnswerComponent implements OnInit , AfterViewInit {
 
   issendChannelConnectionOpen: boolean = false;
   isreceivingChannelConnectionOpen: boolean = false;
   @ViewChild('sendingTextt') sendingTextt!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('receivingTextt') receivingTextt!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('localvid') localvid!: ElementRef<HTMLVideoElement>;
+  @ViewChild('remotevid') remotevid!: ElementRef<HTMLVideoElement>;
   public localPeerConnection!: RTCPeerConnection;
+  public stream!: MediaStream;
   
   //public remotePeerConnection!: RTCPeerConnection;
   //public sendChannel!: RTCDataChannel;
   //public receiveChannel!: RTCDataChannel;
-  constraints: MediaStreamConstraints = { audio: true, video: false };
+  //constraints: MediaStreamConstraints = { audio: true, video: false };
   constructor() {
   }
   ngOnInit(): void {
@@ -47,37 +53,68 @@ export class AnswerComponent implements OnInit {
     // this.rtc.onicecandidate = this.onIceCandidate;
     // this.rtc.ondatachannel = this.ondatachannel;
   }
+  ngAfterViewInit() {
+    const mediaDevices = navigator.mediaDevices as any;
+    window.localPeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
+
+    this.Trace("Created Local Peer Connection Object localPeerConnection");
+    var sc_stream = mediaDevices.getUserMedia({ video: true, audio:  true })
+    .then((stream: MediaStream) => {
+      // stream.getTracks().forEach((track: MediaStreamTrack) => {
+      //   debugger;
+      //   window.localPeerConnection.addTrack(track);
+      // });
+      window.localPeerConnection.addTrack(stream.getVideoTracks()[0], stream);
+      this.localvid.nativeElement.srcObject = stream;
+      this.localvid.nativeElement.play();
+    });
+    debugger;
+    console.log(sc_stream);
+  }
   public Trace(text: string){
     console.log((performance.now() / 1000).toFixed(3) + ": " + text);
   }
   createConnection(): void{
     debugger;
     // ? Local
-    window.localPeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
-    this.Trace("Created Local Peer Connection Object localPeerConnection");
-    try{
-      window.sendChannel = window.localPeerConnection?.createDataChannel("sendDataChannel");
-      this.Trace("Created send data channel");
-    }catch(e){
-      alert('Failed to create data channel. ' +
-      'You need Chrome M25 or later with RtpDataChannel enabled');
-      this.Trace("createDataChannel() failed with exception: " + e.message);
-    }
+    // try{
+    //window.sendChannel = window.localPeerConnection?.createDataChannel("sendDataChannel");
+    //this.Trace("Created send data channel");
+    // }catch(e){
+    //   alert('Failed to create data channel. ' +
+    //   'You need Chrome M25 or later with RtpDataChannel enabled');
+    //   this.Trace("createDataChannel() failed with exception: " + e.message);
+    // }
     window.localPeerConnection.onicecandidate = this.gotLocalCandidate;
-    window.sendChannel.onmessage = this.handleLocalMessage;
-    window.sendChannel.onopen = this.handleSendChannelStateChange;
-    window.sendChannel.onclose = this.handleSendChannelStateChange;
+    //window.sendChannel.onmessage = this.handleLocalMessage;
+    //window.sendChannel.onopen = this.handleSendChannelStateChange;
+    //window.sendChannel.onclose = this.handleSendChannelStateChange;
     window.localPeerConnection.oniceconnectionstatechange = this.Localoniceconnectionstatechange;
     // ? Remote
     window.remotePeerConnection = new RTCPeerConnection(PEER_CONNECTION_CONFIG);
     console.log("Created Remote Peer Connection Object remotePeerConnection");
+    window.remotePeerConnection.ontrack = this.onremotetrack;
     window.remotePeerConnection.onicecandidate = this.gotRemoteIceCandidate;
-    window.remotePeerConnection.ondatachannel = this.gotReceiveChannel;
+    //window.remotePeerConnection.ondatachannel = this.gotReceiveChannel;
     window.remotePeerConnection.oniceconnectionstatechange = this.Remoteoniceconnectionstatechange;
 
     window.localPeerConnection.createOffer()
     .then(LD => this.gotLocalDescription(LD))
     .catch(err => this.Trace("Error: " + err));
+  }
+  onremotetrack(data: RTCTrackEvent){
+    debugger;
+    if(data.streams.length > 0){
+      //this.remotevid.nativeElement.srcObject = data.streams[0];
+      //this.remotevid.nativeElement.play();
+      //this.attach(data.streams[0])
+      //cll().src = window.URL.createObjectURL(data.streams[0]);
+    }
+  }
+  attach(data: MediaStream){
+    debugger;
+    this.remotevid.nativeElement.srcObject = data;
+    this.remotevid.nativeElement.play();
   }
   sendData(){
     debugger;

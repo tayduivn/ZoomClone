@@ -1,3 +1,4 @@
+import { JwtService } from './admin/services/jwt.service';
 import { AdminModule } from './admin/admin.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -15,9 +16,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebRTCService } from './services/web-rtc.service';
 import { AudioComponent } from './components/audio/audio.component';
 import { UserComponent } from './components/user/user.component';
-import { LoaderComponent } from './components/loader/loader.component';
 import { RtcconComponent } from './components/rtccon/rtccon.component';
 import { AnswerComponent } from './components/answer/answer.component';
+import { CommonModule } from '@angular/common';
+import { JobComponent } from './components/job/job.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { ZoompaginationComponent } from './components/zoompagination/zoompagination.component';
+import { LoaderComponent } from './shared/loader/loader.component';
+import { SitelayoutComponent } from './components/sitelayout/sitelayout.component';
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 
 @NgModule({
@@ -29,7 +38,10 @@ import { AnswerComponent } from './components/answer/answer.component';
     UserComponent,
     LoaderComponent,
     RtcconComponent,
-    AnswerComponent
+    AnswerComponent,
+    JobComponent,
+    ZoompaginationComponent,
+    SitelayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -39,8 +51,14 @@ import { AnswerComponent } from './components/answer/answer.component';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule,
     AdminModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config:{
+        tokenGetter: tokenGetter
+      }
+    }),
     LoggerModule.forRoot({
     serverLoggingUrl: '/api/logs', 
     level: NgxLoggerLevel.DEBUG,
@@ -51,7 +69,13 @@ import { AnswerComponent } from './components/answer/answer.component';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [ WebRTCService ],
+  providers: [ 
+    WebRTCService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtService,
+      multi: true
+    } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

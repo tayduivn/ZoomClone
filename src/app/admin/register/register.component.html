@@ -1,0 +1,106 @@
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                            <div class="card-body">
+                                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputFirstName">First Name</label>
+                                                <input class="form-control py-4" 
+                                                formControlName="firstName"
+                                                [ngClass]="{ 
+                                                    'is-valid':getFirstName?.valid && (getFirstName?.touched) || (getFirstName?.valid && submitted),
+                                                    'is-invalid' : getFirstName?.invalid && (getFirstName?.touched) || (getFirstName?.invalid && submitted) }"
+                                                id="inputFirstName" type="text" placeholder="Enter first name" />
+                                                <div class="invalid-feedback" *ngIf="getFirstName?.errors?.required && (getFirstName?.touched) || (getFirstName?.errors?.required && submitted)">First Name is required</div>
+                                                <div class="invalid-feedback" *ngIf="getFirstName?.errors?.minlength && (getFirstName?.touched) || (getFirstName?.errors?.minlength && submitted)">Min length 3</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputLastName">Last Name</label>
+                                                <input class="form-control py-4"
+                                                formControlName="lastName"
+                                                [ngClass]="{ 
+                                                    'is-valid':getLastName?.valid && (getLastName?.touched) || (getLastName?.valid && submitted),
+                                                    'is-invalid' : getLastName?.invalid && (getLastName?.touched) || (getLastName?.invalid && submitted) }"
+                                                id="inputLastName" type="text" placeholder="Enter last name" />
+                                                <div class="invalid-feedback" *ngIf="getLastName?.errors?.required && (getLastName?.touched) || (getLastName?.errors?.required && submitted)">Last Name is required</div>
+                                                <div class="invalid-feedback" *ngIf="getLastName?.errors?.minlength && (getLastName?.touched) || (getLastName?.errors?.minlength && submitted)">Min length 3</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">Username</label>
+                                                <input class="form-control py-4" 
+                                                formControlName="username"
+                                                [ngClass]="{ 
+                                                    'is-valid':getUsername?.valid && (getUsername?.touched) || (getUsername?.valid && submitted),
+                                                    'is-invalid' : getUsername?.invalid && (getUsername?.touched) || (getUsername?.invalid && submitted) }"
+                                                id="inputEmailAddress" type="text" aria-describedby="emailHelp" placeholder="Enter username" />
+                                                <div class="invalid-feedback" *ngIf="getUsername?.errors?.required && (getUsername?.touched) || (getUsername?.errors?.required && submitted)">Username is required</div>
+                                                <div class="invalid-feedback" *ngIf="getUsername?.errors?.minlength && (getUsername?.touched) || (getUsername?.errors?.minlength && submitted)">Min length 3</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">Email</label>
+                                                <input class="form-control py-4"
+                                                formControlName="email"
+                                                [ngClass]="{ 
+                                                    'is-valid':getEmail?.valid && (getEmail?.touched) || (getEmail?.valid && submitted),
+                                                    'is-invalid' : getEmail?.invalid && (getEmail?.touched) || (getEmail?.invalid && submitted) }"
+                                                id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" />
+                                                <div class="invalid-feedback" *ngIf="getEmail?.errors?.required && (getEmail?.touched) || (getEmail?.errors?.required && submitted)">Email is required</div>
+                                                <div class="invalid-feedback" *ngIf="getEmail?.errors?.email && (getEmail?.touched) || (getEmail?.errors?.email && submitted)">Email is not in correct format</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputPassword">Password</label>
+                                                <input class="form-control py-4" 
+                                                formControlName="password"
+                                                [ngClass]="{ 
+                                                    'is-valid':getPassword?.valid && (getPassword?.touched) || (getPassword?.valid && submitted),
+                                                    'is-invalid' : getPassword?.invalid && (getPassword?.touched) || (getPassword?.invalid && submitted) }"
+                                                id="inputPassword" type="password" placeholder="Enter password" />
+                                                <div class="invalid-feedback" *ngIf="getPassword?.errors?.required && (getPassword?.touched) || (getPassword?.errors?.required && submitted)">Password is required</div>
+                                                <div class="invalid-feedback" *ngIf="getPassword?.errors?.mismatch && (getPassword?.touched) || (getPassword?.errors?.mismatch && submitted)">Password does not match the confirm password</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
+                                                <input class="form-control py-4" 
+                                                formControlName="confirmPassword"
+                                                [ngClass]="{ 
+                                                    'is-valid':getConfirmPassword?.valid && (getConfirmPassword?.touched) || (getPassword?.valid && submitted),
+                                                    'is-invalid' : getConfirmPassword?.invalid && (getConfirmPassword?.touched) || (getPassword?.invalid && submitted) }"
+                                                id="inputConfirmPassword" type="password" placeholder="Confirm password" />
+                                                <div class="invalid-feedback" *ngIf="getConfirmPassword?.errors?.required && (getConfirmPassword?.touched) || (getConfirmPassword?.errors?.required && submitted)">Confirm Password is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-4 mb-0"><button type="submit" class="btn btn-primary btn-block">Create Account</button></div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center">
+                                <div class="small"><a routerLink="/Login" routerLinkActive="active">Have an account? Go to login</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

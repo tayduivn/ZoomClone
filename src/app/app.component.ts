@@ -1,11 +1,6 @@
+import { TokenService } from './admin/services/token.service';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 declare var $: any;
-import { 
-  NavigationEnd,
-  NavigationStart,
-  Router
- } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,9 +8,9 @@ import {
 })
 export class AppComponent implements OnInit , AfterViewInit{
   //isLoader: boolean = false;
-  constructor(private title: Title,private _router: Router)
+  constructor()
   {
-    title.setTitle('Home from title');
+
   }
   ngAfterViewInit(): void {
     $(document).ready(function() {
@@ -24,20 +19,6 @@ export class AppComponent implements OnInit , AfterViewInit{
   }
   ngOnInit(): void
   {
-    //this.routerEvents();
+    
   }
-  routerEvents() {
-    this._router.events.subscribe((event) => {
-      switch (true) {
-        case event instanceof NavigationStart: {
-          //this.isLoader = true;
-          break;
-        }
-        case event instanceof NavigationEnd: {
-          //this.isLoader = false;
-          break;
-        }
-      }
-    });
-}
 }
