@@ -22,4 +22,7 @@ export class SitelayoutComponent implements OnInit , AfterViewInit{
     });
   }
 
+  onToggle(){
+      $("#toggleme").toggleClass("sb-sidenav-toggled");
+  }
 }

@@ -1,10 +1,11 @@
+import { TokenService } from 'src/app/admin/services/token.service';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Job } from './../../models/job';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { JobService } from 'src/app/services/job.service';
 import { BaseCrudApi } from 'src/app/admin/models/base-view-model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { delay, takeUntil } from 'rxjs/operators';
 declare var $: any;
 
@@ -15,9 +16,10 @@ declare var $: any;
 })
 export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy {
   job: Job = new Job();
-  constructor(private jobService: JobService,private router: Router) 
+  constructor(private jobService: JobService,private router: Router, private tokenService: TokenService) 
   { 
     super();
+    this.allowedRoles = this.tokenService.getUserRoles();
   }
   ngOnInit(): void {
    this.getItems();
@@ -60,7 +62,6 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
     .subscribe(res => {
       if(res.isSuccess){
         // Make notification to user for saving data
-        debugger;
       }
     },
     (error: HttpErrorResponse) => {

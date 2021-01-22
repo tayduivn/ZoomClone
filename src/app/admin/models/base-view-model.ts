@@ -29,7 +29,9 @@ export class BaseCrudApi<T>{
   public items: T[] = [];
   public query: string = '';
   public pager: Pager = new Pager();
+  public pageNo: number = 1;
   myNumbers: number[] = [];
+  allowedRoles: string[] = [];
   public runIT(): void{
     this.myNumbers = [];
     for(let page = this.pager.startPage; page <= this.pager.endPage; page++){

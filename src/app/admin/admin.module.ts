@@ -1,3 +1,4 @@
+import { ChatComponent } from './../components/chat/chat.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
@@ -10,13 +11,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './logout/logout.component';
 import { RegisterComponent } from './register/register.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [ // Components , directives and pipes that are part of current module.
-  LoginComponent, LogoutComponent, RegisterComponent
+  LoginComponent, 
+  LogoutComponent, 
+  RegisterComponent, 
+  NotfoundComponent,
+  UsersComponent
 ],
   imports: [ // List of modules so current module can use components that are already
              // exported by some other module
+             CommonModule,
              BrowserModule,
              LoadingBarModule,
              LoadingBarRouterModule,
@@ -24,13 +32,13 @@ import { RegisterComponent } from './register/register.component';
              AppRoutingModule,
              FormsModule,
              ReactiveFormsModule,
-             CommonModule,
              HttpClientModule
   ],
   exports:[
     LoginComponent,
     LogoutComponent,
-    RegisterComponent
+    RegisterComponent,
+    UsersComponent
   ],
   providers:[
 

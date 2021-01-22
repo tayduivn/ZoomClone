@@ -24,6 +24,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { ZoompaginationComponent } from './components/zoompagination/zoompagination.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { SitelayoutComponent } from './components/sitelayout/sitelayout.component';
+import { ChatComponent } from './components/chat/chat.component';
 export function tokenGetter() {
   return localStorage.getItem("access_token");
 }
@@ -41,7 +42,8 @@ export function tokenGetter() {
     AnswerComponent,
     JobComponent,
     ZoompaginationComponent,
-    SitelayoutComponent
+    SitelayoutComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

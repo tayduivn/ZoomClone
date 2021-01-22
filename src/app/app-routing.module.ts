@@ -1,3 +1,6 @@
+import { UsersComponent } from './admin/users/users.component';
+import { NotfoundComponent } from './admin/notfound/notfound.component';
+import { ChatComponent } from './components/chat/chat.component';
 import { RegisterComponent } from './admin/register/register.component';
 import { LogoutComponent } from './admin/logout/logout.component';
 import { JobComponent } from './components/job/job.component';
@@ -22,16 +25,24 @@ const routes: Routes = [
     { path: 'Audio' , component: AudioComponent },
     { path: 'RTC' , component: RtcconComponent },
     { path: 'Answer' , component: AnswerComponent },
-    { path: 'Job' , component: JobComponent , canActivate: [ CanactiveguardserviceService ] }
+    { path: 'Chat' , component: ChatComponent },
+    { path: 'Users' , component: UsersComponent },
+    { path: 'Jobs',
+      component: JobComponent,
+      canActivate: [ CanactiveguardserviceService ],
+      data: { allowedRoles: ['Admin','Visitor','Translator','Client'] } }
    ]
   },
   { path: 'Login' , component: LoginComponent },
   { path: 'Logout' , component: LogoutComponent },
-  { path: 'Register' , component: RegisterComponent }
+  { path: 'Register' , component: RegisterComponent },
+  { path: '**' , component: NotfoundComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [
+    RouterModule
+  ]
 })
 export class AppRoutingModule { }

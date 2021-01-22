@@ -18,3 +18,11 @@ export class RegisterDTO{
     public password: string | undefined;
     public confirmPassword: string | undefined;
 }
+export class UserViewModel{
+    firstName: string | undefined;
+    lastName: string | undefined;
+    id: string | undefined;
+    userName: string | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined;
+}

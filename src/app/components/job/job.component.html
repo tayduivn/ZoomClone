@@ -1,7 +1,9 @@
-<div class="container">
+<div class="container" style="height: 100%;">
   <div class="row">
     <div class="col-md-3">
-      <button class="btn btn-secondary" data-toggle="modal" data-target="#modal_aside_left"><i class="fas fa-plus"></i></button>
+      <button *ngIf="allowedRoles.includes('Client')" class="btn btn-secondary" data-toggle="modal" data-target="#modal_aside_left">
+        <i class="fas fa-plus"></i>
+      </button>
     </div>
     <div class="col-md-6">
     </div>
@@ -18,9 +20,16 @@
     </div>
   </div>
   <!-- Items -->
-  <ng-template [ngIf]="isLoading">
-    <app-loader></app-loader>
-  </ng-template>
+  <!-- <ng-template [ngIf]="isLoading">
+    <div class="mygrid">
+      <app-loader></app-loader>
+    </div>
+  </ng-template> -->
+  <div class="mygrid" *ngIf="isLoading">
+    <div>
+      <app-loader></app-loader>
+    </div>
+  </div>
     <div class="albums mb-3" *ngIf="!isLoading">
         <div class="album" *ngFor="let j of items">
             <img class="album__artwork" src="">

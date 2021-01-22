@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import * as signalR from "@aspnet/signalr";
 import { environment } from 'src/environments/environment.prod';
-import { Iceserver } from '../models/iceserver';
 
 @Injectable({
   providedIn: 'root'
