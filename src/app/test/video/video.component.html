@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <video #localVideo [autoplay]="true" [muted]="true"></video>
+        </div>
+        <div class="col-md-6">
+            <video #remoteVideo [autoplay]="true"></video>
+        </div>
+    </div>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <button class="btn btn-primary" (click)="startLocalVideo()">Start</button><br/>
+        <button class="btn " [ngClass]="isHubConnected == true ? 'btn-success' : 'btn-danger'" (click)="pauseLocalVideo()">Pause</button>
+        <button class="btn btn-primary" (click)="call()">Call</button>
+        <button class="btn btn-primary" (click)="hangup()">Pause</button>
+      </div>
+</div>

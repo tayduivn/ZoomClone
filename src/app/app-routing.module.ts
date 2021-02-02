@@ -15,6 +15,8 @@ import { ContactComponent } from './components/contact/contact.component';
 import { VideocandeactivateService } from './guards/videocandeactivate.service';
 import { CanactiveguardserviceService } from './guards/canactiveguardservice.service';
 import { SitelayoutComponent } from './components/sitelayout/sitelayout.component';
+import { VideoComponent } from './test/video/video.component';
+import { HomeComponent } from './twilio/home/home.component';
 
 const routes: Routes = [
   { path: '' ,
@@ -27,6 +29,8 @@ const routes: Routes = [
     { path: 'Answer' , component: AnswerComponent },
     { path: 'Chat' , component: ChatComponent },
     { path: 'Users' , component: UsersComponent },
+    { path: 'Video' , component: VideoComponent },
+    { path: 'TwilioHome' , component: HomeComponent },
     { path: 'Jobs',
       component: JobComponent,
       canActivate: [ CanactiveguardserviceService ],

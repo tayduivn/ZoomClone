@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import * as signalR from "@aspnet/signalr";
+import * as signalR from "@microsoft/signalr";
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class NotifService {
   };
 
   public SendOffer(Offer: string){
-    if(this.hubConnection.state == 1){
+    if(this.hubConnection.state == 'Connected'){
       this.hubConnection?.invoke("SendOffer", Offer);
     }else{
       alert("Your connection state has been lost.");

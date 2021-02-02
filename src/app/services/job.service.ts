@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
+import { retryWhen, delay, scan } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,21 @@ export class JobService {
   public getJobs(page: number = 1, query: string = ''): Observable<BaseViewModel<Job>>
   {
     let url = `${environment.apiUrl}Job/GetJobs?page=${page}&query=${query}`;
-    return this.http.get<BaseViewModel<Job>>(url);
+    return this.http.get<BaseViewModel<Job>>(url)
+    .pipe(
+      retryWhen(notifier => notifier.pipe(
+        delay(3000),
+        scan((retryCount) => {
+          if(retryCount >= 5){
+            throw notifier;
+          }else{
+            retryCount++;
+            console.log(`Retrying Attempts: ${retryCount}`);
+            return retryCount;
+          }
+        },0)
+      ))
+    );
   }
   public createJob(job: Job): Observable<BaseViewModel<Job>>
   {

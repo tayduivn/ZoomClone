@@ -25,6 +25,17 @@ import { ZoompaginationComponent } from './components/zoompagination/zoompaginat
 import { LoaderComponent } from './shared/loader/loader.component';
 import { SitelayoutComponent } from './components/sitelayout/sitelayout.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { VideoComponent } from './test/video/video.component';
+import { CameraComponent } from './twilio/camera/camera.component';
+import { HomeComponent } from './twilio/home/home.component';
+import { ParticipantsComponent } from './twilio/participants/participants.component';
+import { RoomsComponent } from './twilio/rooms/rooms.component';
+import { SettingsComponent } from './twilio/settings/settings.component';
+import { ToastrModule } from 'ngx-toastr';
+import { DeviceSelectComponent } from './twilio/settings/device-select/device-select.component';
+import { InterceptererrorhandlingService } from './services/interceptererrorhandling.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RetryintercepterService } from './services/retryintercepter.service';
 export function tokenGetter() {
   return localStorage.getItem("access_token");
 }
@@ -43,7 +54,14 @@ export function tokenGetter() {
     JobComponent,
     ZoompaginationComponent,
     SitelayoutComponent,
-    ChatComponent
+    ChatComponent,
+    VideoComponent,
+    CameraComponent,
+    HomeComponent,
+    ParticipantsComponent,
+    RoomsComponent,
+    SettingsComponent,
+    DeviceSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +74,12 @@ export function tokenGetter() {
     CommonModule,
     AdminModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-bottom-left',
+      progressBar: true
+    }), // ToastrModule added
     JwtModule.forRoot({
       config:{
         tokenGetter: tokenGetter
@@ -77,7 +101,18 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtService,
       multi: true
-    } ],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RetryintercepterService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptererrorhandlingService,
+      multi: true
+    }
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

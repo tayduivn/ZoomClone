@@ -54,7 +54,7 @@ export class LoginComponent extends BaseCrudApi<UserDTO> implements OnInit {
     .subscribe((res: BaseViewModel<UserDTO>) => {
       if(res.isSuccess){
         this.tokenService.setUser(res.model!);
-        this.router.navigateByUrl('/Job');
+        this.router.navigateByUrl('/Users');
       }else{
         this.isError = true;
         this.errorMessage = res.message;

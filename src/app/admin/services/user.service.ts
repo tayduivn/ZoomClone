@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserDTO, UserViewModel } from '../models/user';
 import { BaseViewModel } from '../models/base-view-model';
 import { environment } from 'src/environments/environment.prod';
+import { delay, retryWhen, scan } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

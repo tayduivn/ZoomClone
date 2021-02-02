@@ -25,4 +25,5 @@ export class UserViewModel{
     userName: string | undefined;
     email: string | undefined;
     phoneNumber: string | undefined;
+    language: string | undefined;
 }
