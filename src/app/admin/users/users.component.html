@@ -3,15 +3,18 @@
       <div class="col-md-3">
       </div>
       <div class="col-md-6">
+        <div *ngIf="isError" class="shadow-sm alert alert-warning" style="border-left: 5px solid #efa31d;">
+          <i class="fas fa-exclamation-circle mr-2"></i><strong>Your request has been cancelled.</strong>
+        </div>
       </div>
       <div class="col-md-3">
         <div class="input-group mb-3">
           <input type="text" class="form-control" required [(ngModel)]="query" placeholder="Search here. . ." aria-label="Recipient's username" aria-describedby="basic-addon2">
           <div class="input-group-append">
-            <button class="btn btn-secondary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
+            <button class="btn btn-primary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
           </div>
           <div class="input-group-append">
-            <button class="btn btn-secondary" (click)="reset()"  type="button"><i class="fas fa-sync-alt"></i></button>
+            <button class="btn btn-primary" (click)="reset()"  type="button"><i class="fas fa-sync-alt"></i></button>
           </div>
         </div>
       </div>

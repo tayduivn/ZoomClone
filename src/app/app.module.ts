@@ -15,7 +15,6 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebRTCService } from './services/web-rtc.service';
 import { AudioComponent } from './components/audio/audio.component';
-import { UserComponent } from './components/user/user.component';
 import { RtcconComponent } from './components/rtccon/rtccon.component';
 import { AnswerComponent } from './components/answer/answer.component';
 import { CommonModule } from '@angular/common';
@@ -35,7 +34,17 @@ import { ToastrModule } from 'ngx-toastr';
 import { DeviceSelectComponent } from './twilio/settings/device-select/device-select.component';
 import { InterceptererrorhandlingService } from './services/interceptererrorhandling.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RetryintercepterService } from './services/retryintercepter.service';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import { PaginatonComponent } from './shared/paginaton/paginaton.component';
+import { SessionsComponent } from './components/sessions/sessions.component';
+import { ColoredrowComponent } from './shared/coloredrow/coloredrow.component';
+import { NotfoundanyrecordComponent } from './shared/notfoundanyrecord/notfoundanyrecord.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LanguagesComponent } from './components/languages/languages.component';
+import { SuccessComponent } from './shared/success/success.component';
+
+
+
 export function tokenGetter() {
   return localStorage.getItem("access_token");
 }
@@ -47,7 +56,6 @@ export function tokenGetter() {
     AboutComponent,
     ContactComponent,
     AudioComponent,
-    UserComponent,
     LoaderComponent,
     RtcconComponent,
     AnswerComponent,
@@ -61,7 +69,14 @@ export function tokenGetter() {
     ParticipantsComponent,
     RoomsComponent,
     SettingsComponent,
-    DeviceSelectComponent
+    DeviceSelectComponent,
+    PaginatonComponent,
+    SessionsComponent,
+    ColoredrowComponent,
+    NotfoundanyrecordComponent,
+    DashboardComponent,
+    LanguagesComponent,
+    SuccessComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +90,7 @@ export function tokenGetter() {
     AdminModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    AutocompleteLibModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-bottom-left',
@@ -100,11 +116,6 @@ export function tokenGetter() {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtService,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RetryintercepterService,
       multi: true
     },
     {

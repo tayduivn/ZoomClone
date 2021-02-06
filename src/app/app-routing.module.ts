@@ -1,4 +1,6 @@
-import { UsersComponent } from './admin/users/users.component';
+import { LanguagesComponent } from './components/languages/languages.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SessionsComponent } from './components/sessions/sessions.component';
 import { NotfoundComponent } from './admin/notfound/notfound.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { RegisterComponent } from './admin/register/register.component';
@@ -17,11 +19,14 @@ import { CanactiveguardserviceService } from './guards/canactiveguardservice.ser
 import { SitelayoutComponent } from './components/sitelayout/sitelayout.component';
 import { VideoComponent } from './test/video/video.component';
 import { HomeComponent } from './twilio/home/home.component';
+import { UsersComponent } from './admin/users/users.component';
 
 const routes: Routes = [
   { path: '' ,
    component: SitelayoutComponent,
    children: [
+    { path: 'Dashboard' , component: DashboardComponent },
+    { path: 'Languages' , component: LanguagesComponent },
     { path: 'Contact' , component: ContactComponent },
     { path: 'About' , component: AboutComponent , canDeactivate: [ VideocandeactivateService ]},
     { path: 'Audio' , component: AudioComponent },
@@ -31,6 +36,7 @@ const routes: Routes = [
     { path: 'Users' , component: UsersComponent },
     { path: 'Video' , component: VideoComponent },
     { path: 'TwilioHome' , component: HomeComponent },
+    { path: 'Sessions' , component: SessionsComponent },
     { path: 'Jobs',
       component: JobComponent,
       canActivate: [ CanactiveguardserviceService ],

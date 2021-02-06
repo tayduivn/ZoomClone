@@ -1,56 +1,70 @@
 <div class="container" style="height: 100%;">
   <div class="row">
-    <div class="col-md-3">
-      <button *ngIf="allowedRoles.includes('Client')" class="btn btn-secondary" data-toggle="modal" data-target="#modal_aside_left">
-        <i class="fas fa-plus"></i>
-      </button>
+    <div class="col-md-4">
+      <span class="pr-2 mr-2" style="display: inline-block;border-right: 1px solid #593196;">
+        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#modal_aside_left">
+          Generate Request<i class="fas fa-plus ml-2"></i>
+        </button>
+      </span>
+      <span class="badge badge-primary">Total: {{pager.totalItems}}</span>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
     </div>
     <div class="col-md-3">
       <div class="input-group mb-3">
         <input type="text" class="form-control" required [(ngModel)]="query" placeholder="Search here. . ." aria-label="Recipient's username" aria-describedby="basic-addon2">
         <div class="input-group-append">
-          <button class="btn btn-secondary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
+          <button class="btn btn-primary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
         </div>
         <div class="input-group-append">
-          <button class="btn btn-secondary" (click)="reset()" type="button"><i class="fas fa-sync-alt"></i></button>
+          <button class="btn btn-primary" (click)="reset()" type="button"><i class="fas fa-sync-alt"></i></button>
         </div>
       </div>
     </div>
   </div>
-  <!-- Items -->
-  <!-- <ng-template [ngIf]="isLoading">
-    <div class="mygrid">
-      <app-loader></app-loader>
-    </div>
-  </ng-template> -->
-  <div class="mygrid" *ngIf="isLoading">
-    <div>
-      <app-loader></app-loader>
-    </div>
-  </div>
-    <div class="albums mb-3" *ngIf="!isLoading">
-        <div class="album" *ngFor="let j of items">
-            <img class="album__artwork" src="">
-          <div class="album__details">
-            <h2 class="display-4">{{j.name}}</h2>
-            <p class="album__artist">{{j.createdAt | date }}</p>
-            <p class="album__desc">{{j.description | slice:0:50}}</p>
+  <!-- Loader -->
+  <app-loader [isLoading]="isLoading"></app-loader>
+  <!-- Loader -->
+  <table class="table table-hover" *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th scope="col">Request</th>
+        <th scope="col">Request State</th>
+        <th scope="col">Requested By</th>
+        <th scope="col" class="text-center">Apply</th>
+        <th scope="col" class="text-center">Assign request</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-light" *ngFor="let j of items">
+        <th scope="row">
+          <div>
+            {{j.name}}
           </div>
-        </div>    
-      </div>
+          <div class="small text-muted">
+            <span>Requested Time: </span>{{j.createdAt | date}}
+          </div>
+        </th>
+        <td>
+          <app-coloredrow [jobState]="j.jobState"></app-coloredrow>
+        </td>
+        <td>{{j.postedBy}} </td>
+        <td class="text-center">
+          <i style="cursor: pointer;;" class="fas fa-hand-point-up text-success" 
+          *ngIf="(j.jobState === 0)"
+          (click)="showAcceptanceModal(j.jobID)" ></i>
+        </td>
+        <td class="text-center">
+          <i style="cursor: pointer;" class="fas fa-user-tag text-primary"
+          *ngIf="!(j.jobState === 0)"
+          (click)="showassignationModal(j.jobID,j.acceptedBy)" ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
       <!-- Items -->
       <!-- Pagination -->
-      <nav aria-label="Page navigation example" 
-      *ngIf="(pager.totalPages > 1) && !isLoading"
-      style="cursor: pointer;">
-        <ul class="pagination">
-          <li class="page-item" *ngIf="(pager.currentPage > 1) && (pager.totalPages > 1)"><a class="page-link" (click)="getItems(pager.currentPage - 1)">Previous</a></li>
-          <li class="page-item {{ pager.currentPage ==  p ? 'active' : ''}}" *ngFor="let p of myNumbers"><a class="page-link" (click)="getItems(p)">{{p}}</a></li>
-          <li class="page-item" *ngIf="pager.currentPage < pager.totalPages"><a class="page-link" (click)="getItems(pager.currentPage + 1)">Next</a></li>
-        </ul>
-      </nav>
+      <app-paginaton [pager]="pager" [isPaginationLoading]="isLoading" (nextPage)="getItems($event)"></app-paginaton>
       <!-- Pagination -->
       <!-- Left Modal -->
 <div id="modal_aside_left" class="modal fixed-left fade" tabindex="-1" role="dialog">
@@ -83,4 +97,92 @@
   </div> <!-- modal-bialog .// -->
 </div> <!-- modal.// -->
 <!-- Left Modal -->
+      <!-- Accept Modal -->
+      <div id="acceptenceJobModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Accept Request</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form #acceptorjobForm="ngForm" (ngSubmit)="acceptorjobForm.form.valid && onAcceptorSubmitForm(acceptorjobForm)">
+            <div class="modal-body">
+              <div style="border-left: 4px solid;" class="text-success alert alert-success" *ngIf="isAccepted">
+                <i class="fas fa-check-circle mr-2"></i>You have successfully accepted the request.
+              </div>
+                <div class="form-group required">
+                  <label>Please describe your skills/experience in short terms:</label>
+                  <input type="hidden" [(ngModel)]="job.jobID" name="jobID">
+                  <input type="text" [(ngModel)]="job.description" name="description" required minlength="15"
+                  class="form-control form-control-sm">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" [disabled]="!acceptorjobForm.valid || isAcceptingLoading" class="btn btn-primary">
+                <span *ngIf="isAcceptingLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span *ngIf="!isAcceptingLoading">Save changes</span>
+              </button>
+            </div>
+          </form>
+          </div>
+        </div> <!-- modal-bialog .// -->
+      </div> <!-- modal.// -->
+      <!-- Accept Modal -->
+        <!-- Assignation Modal -->
+<div id="assignationModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-aside" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Assign Request</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form #assignationjobForm="ngForm" (ngSubmit)="assignationjobForm.form.valid && onAssignationSubmitForm(assignationjobForm)">
+      <div class="modal-body" style="height: 80vh;">
+        <div style="border-left: 4px solid;" *ngIf="isAssignedSuccessfully" class="alert alert-success">
+          <i class="fas fa-check-circle mr-2"></i>Request have been assign successfully.
+        </div>
+        <div class="form-group required">
+          <label>From:</label>
+          <input type="hidden" [(ngModel)]="job.jobID" name="jobID">
+          <input type="hidden" [(ngModel)]="job.acceptedBy" name="acceptedBy" required>
+          <input type="text" [value]="previousUserName" readonly  class="form-control form-control-sm">
+        </div>
+        <div class="form-group required">
+          <label>To:</label>
+          <ng-autocomplete 
+          [data]="dataUser"
+          [searchKeyword]="keyword"
+          (selected)='selectEventUser($event)'
+          (inputChanged)='onChangeSearchUser($event)'
+          [debounceTime]="500"
+          [itemTemplate]="itemTemplate"
+          [notFoundTemplate]="notFoundTemplate">                                 
+        </ng-autocomplete>
+        
+        <ng-template #itemTemplate let-item>
+        <a [innerHTML]="item.name"></a>
+        </ng-template>
+        
+        <ng-template #notFoundTemplate let-notFound>
+        <div [innerHTML]="'No username found ...'"></div>
+        </ng-template>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" [disabled]="!assignationjobForm.valid || isAcceptingLoading" class="btn btn-primary">
+          <span *ngIf="isAcceptingLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span *ngIf="!isAcceptingLoading">Save changes</span>
+        </button>
+      </div>
+    </form>
+    </div>
+  </div> <!-- modal-bialog .// -->
+</div> <!-- modal.// -->
+<!-- Assignation Modal -->
 </div>

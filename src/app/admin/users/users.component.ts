@@ -21,12 +21,12 @@ export class UsersComponent extends BaseCrudApi<UserViewModel> implements OnInit
   }
 
   ngOnInit(): void {
+    console.log('Users components');
     this.getItems();
   }
   getItems(page: number = 1){
     this.isLoading = true;
-    this.userService.GetUsers(page,this.query)
-    .pipe(takeUntil(this.unsubscribe$))
+    this.add = this.userService.GetUsers(page,this.query)
     .subscribe(res => {
       if(res.isSuccess){
         this.items = res.listModel!,
@@ -47,9 +47,6 @@ export class UsersComponent extends BaseCrudApi<UserViewModel> implements OnInit
     },
     () => {
       this.isLoading = false;
-      if(this.pager != undefined && this.pager.currentPage > 0){
-        this.runIT();
-      }
     })
   }
   reset(){
@@ -68,7 +65,6 @@ export class UsersComponent extends BaseCrudApi<UserViewModel> implements OnInit
     $("#modal_aside_left").modal('hide');
   }
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.dispose();
   }
 }

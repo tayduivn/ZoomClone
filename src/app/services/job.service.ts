@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
-import { retryWhen, delay, scan } from 'rxjs/operators';
+import { retryWhen, delay, scan, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,12 +32,34 @@ export class JobService {
       ))
     );
   }
+
+  public getMyJobs(page: number = 1, query: string = ''): Observable<BaseViewModel<Job>>
+  {
+    let url = `${environment.apiUrl}Job/GetMyJobs?page=${page}&query=${query}`;
+    return this.http.get<BaseViewModel<Job>>(url);
+  }
   public createJob(job: Job): Observable<BaseViewModel<Job>>
   {
     let url = `${environment.apiUrl}Job/Create`;
     job.postedBy = this.tokenService.getUserName();
     job.createdAt = new Date();
-    job.isAvailable = true;
+    return this.http.post<BaseViewModel<Job>>(url, job);
+  }
+  public acceptJob(job: Job): Observable<BaseViewModel<Job>>
+  {
+    let url = `${environment.apiUrl}Job/AcceptJob`;
+    job.acceptedAt = new Date();
+    job.acceptedBy = this.tokenService.getUserName();
+    return this.http.post<BaseViewModel<Job>>(url, job);
+  }
+  public assignJob(job: Job): Observable<BaseViewModel<Job>>
+  {
+    let url = `${environment.apiUrl}Job/AssignJob`;
+    return this.http.post<BaseViewModel<Job>>(url, job);
+  }
+  public cancelJob(job: Job): Observable<BaseViewModel<Job>>
+  {
+    let url = `${environment.apiUrl}Job/CancelJob`;
     return this.http.post<BaseViewModel<Job>>(url, job);
   }
   public getIceServers(): Observable<RTCIceServer[] | undefined>

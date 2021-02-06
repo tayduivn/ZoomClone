@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/zoomclone",
+    "public": "y",
     "ignore": [
       "firebase.json",
       "**/.*",

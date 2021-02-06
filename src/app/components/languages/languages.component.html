@@ -1,0 +1,91 @@
+<div class="container" style="height: 100%;">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="pr-2 mr-2" style="display: inline-block;border-right: 1px solid #593196;">
+            <button class="btn btn-outline-primary" (click)="showFormModal()">
+              Add Language<i class="fas fa-plus ml-2"></i>
+            </button>
+          </span>
+          <span class="badge badge-primary">Total: {{pager.totalItems}}</span>
+      </div>
+      <div class="col-md-6">
+      </div>
+      <div class="col-md-3">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" required [(ngModel)]="query" placeholder="Search here. . ." aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-primary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="input-group-append">
+            <button class="btn btn-primary" (click)="reset()" type="button"><i class="fas fa-sync-alt"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Loader -->
+    <app-loader [isLoading]="isLoading"></app-loader>
+    <!-- Loader -->
+    <!-- Not Found Record -->
+    <app-notfoundanyrecord *ngIf="!(items.length > 0) && !isLoading">
+    </app-notfoundanyrecord>
+    <!-- Not Found Record -->
+    <table class="table table-hover" *ngIf="!isLoading && (items.length > 0)">
+      <thead>
+        <tr>
+          <th scope="col">Language</th>
+          <th scope="col">Native Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-light" *ngFor="let j of items">
+          <th scope="row">{{j.name}}</th>
+          <td scope="row">{{j.nativeName}} </td>
+        </tr>
+      </tbody>
+    </table>
+        <!-- Items -->
+        <!-- Pagination -->
+        <app-paginaton [pager]="pager" [isPaginationLoading]="isLoading" (nextPage)="getItems($event)"></app-paginaton>
+        <!-- Pagination -->
+
+
+
+
+                    <!-- Assignation Modal -->
+<div id="languageModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-aside" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Cancel Request</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form #languageForm="ngForm" (ngSubmit)="languageForm.form.valid && onLanguageSubmitForm(languageForm)">
+        <div class="modal-body">
+            <app-success [isSuccess]="isSaved" [isWarning]="isError" [SetMessage]="'Data saved successfully'"></app-success>
+            <app-success [isWarning]="isError" [SetMessage]="errorMessage!"></app-success>
+          <div class="form-group required">
+            <label>Language Name:</label>
+            <input type="hidden" [(ngModel)]="language.languageID" name="languageID">
+            <input type="text" [(ngModel)]="language.name" name="name" required minlength="3"
+            class="form-control form-control-sm">
+          </div>
+          <div class="form-group required">
+            <label>Native Name:</label>
+            <input type="text" [(ngModel)]="language.nativeName" name="nativeName"
+            class="form-control form-control-sm">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" [disabled]="!languageForm.valid || isSaving" class="btn btn-primary">
+            <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span *ngIf="!isSaving">Save changes</span>
+          </button>
+        </div>
+      </form>
+      </div>
+    </div> <!-- modal-bialog .// -->
+  </div> <!-- modal.// -->
+  <!-- Assignation Modal -->

@@ -1,3 +1,5 @@
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,7 +21,8 @@ export class RegisterComponent extends BaseCrudApi<RegisterDTO> implements OnIni
     private formBuilder: FormBuilder, 
     private userService: UserService,
     private router: Router,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private toastrService: ToastrService
     ){
     super();
     this.registerForm = this.formBuilder.group({
@@ -47,7 +50,22 @@ export class RegisterComponent extends BaseCrudApi<RegisterDTO> implements OnIni
         return;
     }
     this.registerModel = new RegisterDTO(this.registerForm.value);
-    console.log(JSON.stringify(this.registerModel));
+    this.isLoading = true;
+    this.userService.Register(this.registerModel)
+    .subscribe(res => {
+      if(!res.isSuccess){
+        this.isError = true;
+        this.errorMessage = res.message;
+        return;
+      }
+      this.router.navigateByUrl("/Login");
+      console.log(JSON.stringify(res));
+    },(error: HttpErrorResponse) => {
+      console.log(JSON.stringify(error));
+      this.isLoading = false;
+    },() => {
+      this.isLoading = false;
+    })
   }
 
   get getFirstName(){

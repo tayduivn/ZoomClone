@@ -1,0 +1,9 @@
+<div *ngIf="_isWarning" class="shadow-sm alert alert-warning" style="border-left: 5px solid #efa31d;">
+  <i class="fas fa-exclamation-circle mr-2"></i><strong>{{Message}}</strong>
+</div>
+<div *ngIf="_isSuccess" class="shadow-sm alert alert-success text-success"  style="border-left: 5px solid;">
+    <i class="fas fa-check-circle mr-2"></i><strong>{{Message}}</strong>
+  </div>
+  <div *ngIf="_isDanger" class="shadow-sm alert alert-danger text-danger" style="border-left: 5px solid;">
+    <i class="fas fa-times-circle mr-2"></i><strong>{{Message}}</strong>
+  </div>

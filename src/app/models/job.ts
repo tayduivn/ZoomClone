@@ -3,8 +3,11 @@ export class Job {
     name: string = '';
     description: string = '';
     postedBy: string = '';
+    acceptedBy: string = '';
+    acceptedAt!: Date;
     createdAt: Date = new Date();
-    isAvailable: boolean = false;
+    jobState!: number;
+    cancellationReason!: string;
 }
 
 export class OfferAnswerClass{

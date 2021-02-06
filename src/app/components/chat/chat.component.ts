@@ -91,9 +91,6 @@ export class ChatComponent extends BaseCrudApi<Message> implements OnInit {
     },
     () => {
       this.isLoading = false;
-      if(this.pager != undefined && this.pager.currentPage > 0){
-        this.runIT();
-      }
     })
   }
   getmore(){
