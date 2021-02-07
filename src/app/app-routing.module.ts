@@ -1,3 +1,4 @@
+import { CreatejobComponent } from './components/job/createjob/createjob.component';
 import { LanguagesComponent } from './components/languages/languages.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SessionsComponent } from './components/sessions/sessions.component';
@@ -37,6 +38,7 @@ const routes: Routes = [
     { path: 'Video' , component: VideoComponent },
     { path: 'TwilioHome' , component: HomeComponent },
     { path: 'Sessions' , component: SessionsComponent },
+    { path: 'GenerateRequest' , component: CreatejobComponent },
     { path: 'Jobs',
       component: JobComponent,
       canActivate: [ CanactiveguardserviceService ],

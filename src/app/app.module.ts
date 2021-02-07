@@ -17,7 +17,7 @@ import { WebRTCService } from './services/web-rtc.service';
 import { AudioComponent } from './components/audio/audio.component';
 import { RtcconComponent } from './components/rtccon/rtccon.component';
 import { AnswerComponent } from './components/answer/answer.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { JobComponent } from './components/job/job.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ZoompaginationComponent } from './components/zoompagination/zoompagination.component';
@@ -42,6 +42,14 @@ import { NotfoundanyrecordComponent } from './shared/notfoundanyrecord/notfounda
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LanguagesComponent } from './components/languages/languages.component';
 import { SuccessComponent } from './shared/success/success.component';
+import { CreatejobComponent } from './components/job/createjob/createjob.component';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { en_US } from 'ng-zorro-antd/i18n';
+import en from '@angular/common/locales/en';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
+
+
+registerLocaleData(en);
 
 
 
@@ -76,7 +84,8 @@ export function tokenGetter() {
     NotfoundanyrecordComponent,
     DashboardComponent,
     LanguagesComponent,
-    SuccessComponent
+    SuccessComponent,
+    CreatejobComponent
   ],
   imports: [
     BrowserModule,
@@ -91,6 +100,7 @@ export function tokenGetter() {
     HttpClientModule,
     BrowserAnimationsModule,
     AutocompleteLibModule,
+    NzNotificationModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-bottom-left',
@@ -122,7 +132,8 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptererrorhandlingService,
       multi: true
-    }
+    },
+    { provide: NZ_I18N, useValue: en_US }
    ],
   bootstrap: [AppComponent]
 })

@@ -3,7 +3,7 @@
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1030;
+  z-index: 10;
 }
 
 .fixed-bottom {
@@ -11,7 +11,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1030;
+  z-index: 10;
 }
 
 #layoutAuthentication {
@@ -85,7 +85,7 @@
   }
 }
 .sb-nav-fixed .sb-topnav {
-  z-index: 1039;
+  z-index: 10;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
   width: 225px;
@@ -128,7 +128,7 @@
 .sb-topnav {
   padding-left: 0;
   height: 56px;
-  z-index: 1039;
+  z-index: 10;
 }
 .sb-topnav .navbar-brand {
   width: 225px;
