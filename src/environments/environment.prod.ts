@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  //apiUrl: 'https://localhost:44339/'
-  apiUrl: 'https://zoomclone.azurewebsites.net/'
+  apiUrl: 'https://localhost:44339/'
+  //apiUrl: 'https://zoomclone.azurewebsites.net/'
 };
