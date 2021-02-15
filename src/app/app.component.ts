@@ -1,4 +1,3 @@
-import { TokenService } from './admin/services/token.service';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 declare var $: any;
 @Component({
@@ -6,7 +5,7 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit , AfterViewInit{
+export class AppComponent implements AfterViewInit{
   //isLoader: boolean = false;
   constructor()
   {
@@ -16,9 +15,5 @@ export class AppComponent implements OnInit , AfterViewInit{
     $(document).ready(function() {
       $('body').css('padding-top',$('.navbar').outerHeight() + 'px');
     });
-  }
-  ngOnInit(): void
-  {
-    
   }
 }

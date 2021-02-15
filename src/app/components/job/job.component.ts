@@ -1,13 +1,14 @@
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../admin/services/user.service';
-import { TokenService } from 'src/app/admin/services/token.service';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Job } from './../../models/job';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JobService } from 'src/app/services/job.service';
-import { BaseCrudApi } from 'src/app/admin/models/base-view-model';
 import { Router } from '@angular/router';
+import { BaseCrudApi, Roles } from 'src/app/models/BaseViewModel';
+import { TokenService } from 'src/app/services/user/token.service';
+import { UserService } from 'src/app/services/user/users.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 declare var $: any;
 
 @Component({
@@ -25,10 +26,16 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
   isAssignedSuccessfully = false;
   constructor(private jobService: JobService,private router: Router, private tokenService: TokenService,
     private userService: UserService,
+    private message: NzMessageService,
     private toastrService: ToastrService) 
   { 
     super();
     this.allowedRoles = this.tokenService.getUserRoles();
+    this.allowedRoles.forEach(r => {
+      if(r === Roles.Administrator){
+        this.role = Roles.Administrator;
+      }
+    });
   }
   ngOnInit(): void {
    this.getItems();
@@ -45,17 +52,8 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
         this.errorMessage = res.message;
       }
     },
-    (error: HttpErrorResponse) => {
-      console.log(error.error);
-      this.isError = true;
-      this.errorMessage = error.message;
-      if(error.status == 401){
-        this.router.navigateByUrl("/Login");
-      }
-    },
-    () => {
-      this.isLoading = false;
-    })
+    (error: HttpErrorResponse) => { this.HandleError(error); },
+    () => { this.HandleCompletion(); })
   }
   reset(){
     this.query = '';
@@ -69,29 +67,23 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
         // Make notification to user for saving data
       }
     },
-    (error: HttpErrorResponse) => {
-      debugger;
-      console.log(error.error);
-      this.isError = true;
-      this.errorMessage = error.message;
-      if(error.status == 401){
-        this.router.navigateByUrl("/Login");
-      }
-    },
-    () => {
-      this.isLoading = false;
-      form.reset();
-      //$('#modal_aside_left').modal('toggle'); //or  $('#IDModal').modal('hide');
+    (error: HttpErrorResponse) => { this.HandleError(error) },
+    () => { 
+      this.HandleCompletion(true);
+      form.reset(); 
       this.getItems();
     });
   }
-  onAcceptorSubmitForm(form: NgForm){
+  onAcceptorSubmitForm(){
     this.isAcceptingLoading = true;
     this.jobService.acceptJob(this.job)
     .subscribe(res => {
       if(res.isSuccess){
         // Make notification to user for saving data
         this.isAccepted = true;
+        this.message.success(`Request accepted successfully.`);
+      }else{
+        this.message.error(`${res.message}`);
       }
     },
     (error: HttpErrorResponse) => {
@@ -105,7 +97,6 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
     },
     () => {
       this.isAcceptingLoading = false;
-      form.reset();
       //$('#modal_aside_left').modal('toggle'); //or  $('#IDModal').modal('hide');
       this.getItems();
     });
@@ -140,6 +131,11 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
     this.isAccepted = false;
     this.job.jobID = jobid;
     $("#acceptenceJobModal").modal('show');
+  }
+  confirmAccept(jobid: number){
+    this.isAccepted = false;
+    this.job.jobID = jobid;
+    this.onAcceptorSubmitForm();
   }
   showassignationModal(jobid: number, previousAcceptedBy: string){
     this.isAssignedSuccessfully = false;

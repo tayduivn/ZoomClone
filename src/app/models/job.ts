@@ -1,5 +1,6 @@
 export class Job {
     jobID: number = 0;
+    languageID: number = 0;
     name: string = '';
     description: string = '';
     postedBy: string = '';
@@ -8,6 +9,11 @@ export class Job {
     createdAt: Date = new Date();
     jobState!: number;
     cancellationReason!: string;
+    jobType!: number;
+    startDateTime!: Date;
+    endDateTime!: Date;
+    duration!: any;
+    locationName!: string;
 }
 
 export class OfferAnswerClass{

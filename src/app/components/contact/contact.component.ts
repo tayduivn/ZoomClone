@@ -1,11 +1,11 @@
 import { JobService } from 'src/app/services/job.service';
-import { TokenService } from 'src/app/admin/services/token.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, OnDestroy, AfterViewInit, NgZone } from '@angular/core';
 import { OfferAnswerClass } from 'src/app/models/job';
 import { NotifService } from 'src/app/services/notif.service';
 import { environment } from 'src/environments/environment.prod';
 import { Iceserver } from 'src/app/models/iceserver';
+import { TokenService } from 'src/app/services/user/token.service';
 declare var $: any;
 let PEER_CONNECTION_CONFIG: any = {
   iceServers: [

@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { TokenService } from 'src/app/admin/services/token.service';
+import { Roles } from 'src/app/models/BaseViewModel';
+import { TokenService } from 'src/app/services/user/token.service';
+import { JobService } from 'src/app/services/job.service';
 declare var $: any;
 
 @Component({
@@ -10,7 +12,16 @@ declare var $: any;
 export class SitelayoutComponent implements OnInit , AfterViewInit{
   userName: string = "";
   isloggedin: boolean = false;
-  constructor(private tokenService: TokenService) { }
+  public role: Roles = Roles.None;
+  constructor(private tokenService: TokenService,private JobService: JobService) 
+  { 
+    let allowedRoles: string[] = this.tokenService.getUserRoles();
+    allowedRoles.forEach(r => {
+      if(r === Roles.Administrator){
+        this.role = Roles.Administrator;
+      }
+    });
+  }
 
   ngOnInit(): void {
       this.userName = this.tokenService.getUserName();

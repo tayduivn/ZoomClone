@@ -1,12 +1,13 @@
+import { Roles } from './../../models/BaseViewModel';
 import { LanguageService } from './../../services/language.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BaseCrudApi } from 'src/app/admin/models/base-view-model';
 import { Language } from 'src/app/models/tbllanguage';
 import { ToastrService } from 'ngx-toastr';
-import { TokenService } from 'src/app/admin/services/token.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import { BaseCrudApi } from 'src/app/models/BaseViewModel';
+import { TokenService } from 'src/app/services/user/token.service';
 declare var $: any;
 
 @Component({

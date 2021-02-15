@@ -1,7 +1,7 @@
 import { JobService } from './../../services/job.service';
-import { TokenService } from './../../admin/services/token.service';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Message, VideoService } from '../video.service';
+import { TokenService } from 'src/app/services/user/token.service';
 const mediaConstraints = {
   audio: true,
   video: { width: 320, height: 320 }

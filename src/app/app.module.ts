@@ -1,11 +1,8 @@
-import { JwtService } from './admin/services/jwt.service';
-import { AdminModule } from './admin/admin.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -47,11 +44,31 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { JobtypeComponent } from './shared/jobtype/jobtype.component';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { LoginComponent } from './components/user/login/login.component';
+import { UserComponent } from './components/user/user/user.component';
+import { LogoutComponent } from './components/user/logout/logout.component';
+import { RegisterComponent } from './components/user/register/register.component';
+import { JwtService } from './services/user/jwt.service';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { CustomregisterComponent } from './components/user/customregister/customregister.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+import { CoundownComponent } from './shared/coundown/coundown.component';
+
+
+
+
 
 
 registerLocaleData(en);
-
-
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -85,7 +102,14 @@ export function tokenGetter() {
     DashboardComponent,
     LanguagesComponent,
     SuccessComponent,
-    CreatejobComponent
+    CreatejobComponent,
+    JobtypeComponent,
+    LoginComponent,
+    UserComponent,
+    LogoutComponent,
+    RegisterComponent,
+    CustomregisterComponent,
+    CoundownComponent
   ],
   imports: [
     BrowserModule,
@@ -96,11 +120,20 @@ export function tokenGetter() {
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    AdminModule,
     HttpClientModule,
     BrowserAnimationsModule,
     AutocompleteLibModule,
     NzNotificationModule,
+    NzStepsModule,
+    NzDropDownModule,
+    NzDatePickerModule,
+    NzMessageModule,
+    NzResultModule,
+    NzPopconfirmModule,
+    NgMultiSelectDropDownModule,
+    NzTimePickerModule,
+    NzRadioModule,
+    GooglePlaceModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-bottom-left',
@@ -117,10 +150,7 @@ export function tokenGetter() {
     serverLogLevel: NgxLoggerLevel.ERROR
   })
   ],
-  exports:[
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  exports:[],
   providers: [ 
     WebRTCService,
     {

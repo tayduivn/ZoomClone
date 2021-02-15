@@ -1,6 +1,6 @@
-import { Router } from '@angular/router';
-import { TokenService } from './../services/token.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/user/token.service';
 
 @Component({
   selector: 'app-logout',
@@ -17,3 +17,4 @@ export class LogoutComponent implements OnInit {
   }
 
 }
+

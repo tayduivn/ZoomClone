@@ -1,0 +1,140 @@
+<div class="container py-3" style="background-color: #f2f6f8;height: auto;">
+    <div class="row">
+      <div class="col-md-4">
+        <span class="pr-2 mr-2" style="display: inline-block;border-right: 1px solid #593196;">
+          <button type="button" (click)="showRegModal()" class="btn btn-outline-primary">
+            <i class="fas fa-plus"></i>
+          </button>
+        </span>
+        <span class="badge badge-primary">Total: {{pager.totalItems}}</span>
+      </div>
+      <div class="col-md-5">
+      </div>
+      <div class="col-md-3">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" required [(ngModel)]="query" placeholder="Search here. . ."
+            aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-primary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="input-group-append">
+            <button class="btn btn-primary" (click)="reset()" type="button"><i class="fas fa-sync-alt"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Items -->
+    <div class="page-content container note-has-grid">
+      <div *ngIf="isLoading" [ngStyle]="{'position': isLoading ? 'relative' : '' }" style="height: 70vh;">
+        <div class="spinner-border text-primary" role="status" style="position:absolute;top: 0; bottom: 0; left: 0; right: 0;margin: auto;">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <div *ngIf="!isLoading" class="tab-content bg-transparent">
+        <div id="note-full-container" class="note-has-grid row">
+          <div class="col-md-4 single-note-item all-category note-social" *ngFor="let u of items">
+            <div class="card card-body">
+              <span class="side-stick"></span>
+              <h5 class="note-title text-truncate w-75 mb-0">{{u.firstName}}
+                {{u.lastName}}<i class="point fa fa-circle ml-1 font-10"></i></h5>
+              <p class="note-date font-12 text-muted">{{u.phoneNumber}}</p>
+              <div class="note-content">
+                <p class="note-inner-content text-muted">
+                  <span class="badge text-light" style="background-color: #8a6eb5;">Language:</span> {{u.languages[0]?.name!}}
+                  {{u.languages[1]?.name!}}
+                  {{u.languages[2]?.name!}}
+                </p>
+              </div>
+              <div class="d-flex align-items-center">
+                <span class="mr-1"><i class="fa fa-star favourite-note"></i></span>
+                <span class="mr-1"><i class="fa fa-trash remove-note"></i></span>
+                <div class="ml-auto">
+                  <div class="category-selector btn-group">
+                    <a class="nav-link dropdown-toggle category-dropdown label-group p-0" data-toggle="dropdown" href="#"
+                      role="button" aria-haspopup="true" aria-expanded="true">
+                      <div class="category">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right category-menu">
+                      <a class="note-business badge-group-item badge-business dropdown-item position-relative"
+                      nz-popconfirm
+                      nzPopconfirmTitle="Are you sure you want to block this user?"
+                      nzPopconfirmPlacement="bottom"
+                      (nzOnConfirm)="confirm(u.id)"
+                        href="javascript:void(0);">
+                        <i class="mdi mdi-checkbox-blank-circle-outline mr-1"></i><i class="fas fa-ban text-danger mr-2"></i>
+                        Block
+                      </a>
+                      <button (click)="onChangePassword(u.id)" class="note-social badge-group-item badge-social dropdown-item position-relative " type="button">
+                        <i class="mdi mdi-checkbox-blank-circle-outline mr-1"></i><i class="fas fa-key text-success mr-2"></i>Change password
+                    </button>
+                      <a class="note-important badge-group-item badge-important dropdown-item position-relative"
+                        href="javascript:void(0);">
+                        <i class="mdi mdi-checkbox-blank-circle-outline mr-1"></i> <i class="fas fa-tools text-warning mr-2"></i>Settings
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- Pagination -->
+    <nav *ngIf="!isLoading" class="pb-4" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item" *ngIf="pager.currentPage > 1"><a class="page-link" (click)="getByPager(pager.currentPage - 1)">Previous</a></li>
+        <li class="page-item {{ pager.currentPage ==  p ? 'active' : ''}}" *ngFor="let p of myNumbers"><a class="page-link" (click)="getByPager(p)">{{p}}</a></li>
+        <li class="page-item" *ngIf="pager.currentPage < pager.totalPages"><a class="page-link" (click)="getByPager(pager.currentPage + 1)">Next</a></li>
+      </ul>
+    </nav>
+    <!-- Pagination -->
+    </div>
+    <!-- Items -->
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-aside" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Change password:</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="flex:none;">
+            <div class="form-group mt-2">
+              <label>New Password:</label>
+              <input class="form-control" [(ngModel)]="changeModel.newPassword" name="newPassword" type="password" required minlength="6">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="hideModal()" id="closemodal">Close</button>
+            <button type="submit" [disabled]="isSaving" class="btn btn-primary" (click)="onChangeFormSubmit()">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="!isSaving">Save Changes</span>
+            </button>
+          </div>
+        </div>
+      </div> <!-- modal-bialog .// -->
+    </div> <!-- modal.// -->
+    <!-- Change Password Modal -->
+      <!-- New User Modal -->
+      <div id="newUserModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-aside" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Register new user:</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <app-customregister *ngIf="isRegistrationModalShow"></app-customregister>
+            </div>
+          </div>
+        </div> <!-- modal-bialog .// -->
+      </div> <!-- modal.// -->
+      <!-- New User Modal -->
+  </div>
+  

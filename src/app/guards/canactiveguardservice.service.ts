@@ -1,8 +1,8 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { TokenService } from './../admin/services/token.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
+import { TokenService } from '../services/user/token.service';
 
 @Injectable({
   providedIn: 'root'

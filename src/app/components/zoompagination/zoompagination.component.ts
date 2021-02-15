@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Pager } from 'src/app/admin/models/base-view-model';
+import { Pager } from 'src/app/models/BaseViewModel';
 
 @Component({
   selector: 'app-zoompagination',
@@ -21,7 +21,6 @@ export class ZoompaginationComponent implements OnInit {
 
   runIT(): void{
     this.myNumbers = [];
-    debugger;
     for(let page = this.pager.startPage;page <= this.pager.endPage;page++){
       this.myNumbers.push(page);
     }

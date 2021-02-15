@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { BaseViewModel } from '../admin/models/base-view-model';
-import { TokenService } from '../admin/services/token.service';
+import { BaseViewModel } from '../models/BaseViewModel';
 import { Message } from './chat.service';
+import { TokenService } from './user/token.service';
 
 @Injectable({
   providedIn: 'root'

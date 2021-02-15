@@ -1,2 +1,72 @@
-<button nz-button nzType="primary" (click)="createBasicNotification()">Primary</button>
-<h1>Job Created</h1>
+<div class="container mt-3">
+  <form #assignationjobForm="ngForm" class="mt-2"
+    (ngSubmit)="assignationjobForm.form.valid && onSubmitForm(assignationjobForm)">
+    <div class="form-group required" *ngIf="CurrentIndex === 0">
+      <label>Select Language:</label>
+      <div class="row">
+        <div class="col-md-4">
+          <app-success [isWarning]="isError" [SetMessage]="errorMessage"></app-success>
+          <ng-autocomplete [data]="languageData" [searchKeyword]="keyword" (selected)='selectEventLanguage($event)'
+            (inputChanged)='onChangeSearchLanguage($event)' [debounceTime]="500" [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate">
+          </ng-autocomplete>
+          <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.name"></a>
+          </ng-template>
+          <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="'No language found ...'"></div>
+          </ng-template>
+          <div class="form-group mt-2">
+            <label>Date:</label>
+            <nz-date-picker [(ngModel)]="this.job.startDateTime" required name="startDateTime" class="form-control">
+            </nz-date-picker>
+          </div>
+          <div class="form-group mt-2">
+            <label>Start Time:</label>
+            <nz-time-picker [(ngModel)]="this.job.startDateTime" required name="startDateTime" [nzMinuteStep]="5"
+              nzFormat="HH:mm" class="form-control"></nz-time-picker>
+          </div>
+          <div class="form-group mt-2">
+            <label>End Time:</label>
+            <nz-time-picker [(ngModel)]="this.job.endDateTime" name="endDateTime" required [nzMinuteStep]="5" nzFormat="HH:mm"
+              class="form-control"></nz-time-picker>
+          </div>
+          <div class="form-group">
+            <label>Select request type:</label>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" (click)="OnlineToggle()" class="form-control custom-control-input"
+                id="customSwitch1">
+              <label *ngIf="isOnline" class="custom-control-label" for="customSwitch1">Online</label>
+              <label *ngIf="!isOnline" class="custom-control-label" for="customSwitch1">Offline</label>
+            </div>
+          </div>
+          <div class="form-group mt-2" *ngIf="!isOnline">
+            <label>Enter location:</label>
+            <input class="form-control" ngx-google-places-autocomplete name="locationName" #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)"/>
+          </div>
+          <button type="submit" [disabled]="!assignationjobForm.valid || isSaving || isError" class="btn btn-primary">
+            <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span *ngIf="!isSaving">Save</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isSaved">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <nz-result nzStatus="success" nzTitle="Your request have been generated successfully!"
+          nzSubTitle="Trace your request and in case you can contact us directly.">
+          <div nz-result-extra>
+            <a routerLink="/Sessions" class="btn btn-primary">Go Sessions</a>
+            <a routerLink="/GenerateRequest" class="btn btn-light">Generate another request</a>
+          </div>
+        </nz-result>
+      </div>
+      <div class="col-md-2">
+
+      </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+  </form>
+</div>

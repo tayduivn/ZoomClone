@@ -1,12 +1,12 @@
-import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BaseCrudApi } from '../models/base-view-model';
-import { RegisterDTO } from '../models/user';
-import { TokenService } from '../services/token.service';
-import { LoginModel, UserService } from '../services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { BaseCrudApi } from 'src/app/models/BaseViewModel';
+import { RegisterDTO } from 'src/app/models/user';
+import { TokenService } from 'src/app/services/user/token.service';
+import { UserService } from 'src/app/services/user/users.service';
 
 @Component({
   selector: 'app-register',
@@ -18,11 +18,9 @@ export class RegisterComponent extends BaseCrudApi<RegisterDTO> implements OnIni
   registerForm!: FormGroup;
   submitted: boolean = false;
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router,
-    private tokenService: TokenService,
-    private toastrService: ToastrService
+    private router: Router
     ){
     super();
     this.registerForm = this.formBuilder.group({

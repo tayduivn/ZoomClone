@@ -1,12 +1,15 @@
+import { localhelper } from './../../models/localhelper';
 import { Injectable } from '@angular/core';
-import { UserDTO } from '../models/user';
-import { JwtHelperService } from "@auth0/angular-jwt";
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { UserDTO } from 'src/app/models/user';
+import { Language } from 'src/app/models/tbllanguage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
   userDTO!: UserDTO;
+  helper: localhelper = new localhelper();
   constructor(private jwthelperservice: JwtHelperService) { }
   public setUser(userDTO: UserDTO){
     localStorage.setItem("user", JSON.stringify(userDTO));
@@ -71,6 +74,8 @@ export class TokenService {
   }
   let array: string[] = [];
   let item = decodeToken['role'];
+  let languageIds = decodeToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/streetaddress'];
+  console.log(JSON.stringify(languageIds));
   if(Array.isArray(item)){
     item.forEach(e => {
       array.push(e);
@@ -79,5 +84,26 @@ export class TokenService {
     array.push(item);
   }
   return array;
+  }
+  public setWithExpiry(key: any, value: Language[]) {
+    let minutesToAdd = 10; // 10 Minutes
+    const now = new Date();
+    this.helper = new localhelper();
+    this.helper.expiry = now.getTime() + (minutesToAdd * 60000);
+    this.helper.value = value;
+    localStorage.setItem(key, JSON.stringify(this.helper));
+  }
+  public getWithExpiry(key: any): Language[] {
+    const itemStr = localStorage.getItem(key);
+    if (itemStr === null) {
+      return [] as Language[];
+    }
+    this.helper = JSON.parse(itemStr);
+    const now = new Date()
+    if (now.getTime() > this.helper.expiry) {
+      localStorage.removeItem(key)
+      return [] as Language[];
+    }
+    return this.helper.value;
   }
 }

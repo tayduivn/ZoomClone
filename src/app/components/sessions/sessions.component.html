@@ -1,91 +1,111 @@
 <div class="container" style="height: 100%;">
-    <div class="row">
-      <div class="col-md-3">
-      </div>
-      <div class="col-md-6">
-      </div>
-      <div class="col-md-3">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" required [(ngModel)]="query" placeholder="Search here. . ." aria-label="Recipient's username" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-primary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
-          </div>
-          <div class="input-group-append">
-            <button class="btn btn-primary" (click)="reset()" type="button"><i class="fas fa-sync-alt"></i></button>
-          </div>
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-5">
+    </div>
+    <div class="col-md-3">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" required [(ngModel)]="query" placeholder="Search here. . ."
+          aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-primary" (click)="getItems()" type="button"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="input-group-append">
+          <button class="btn btn-primary" (click)="reset()" type="button"><i class="fas fa-sync-alt"></i></button>
         </div>
       </div>
     </div>
-    <!-- Loader -->
-    <app-loader [isLoading]="isLoading"></app-loader>
-    <!-- Loader -->
-    <!-- Not Found Record -->
-    <app-notfoundanyrecord *ngIf="!(items.length > 0) && !isLoading">
-    </app-notfoundanyrecord>
-    <!-- Not Found Record -->
-    <table class="table table-hover" *ngIf="!isLoading && (items.length > 0)">
-      <thead>
-        <tr>
-          <th scope="col">Request for language</th>
-          <th scope="col">Request State</th>
-          <th scope="col">Requested By</th>
-          <th scope="col">Requested Date</th>
-          <th scope="col" class="text-center">Cancel</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="table-light" *ngFor="let j of items">
-          <th scope="row">{{j.name}}</th>
-          <td>
-              <app-coloredrow [jobState]="j.jobState"></app-coloredrow>
-          </td>
-          <td>{{j.postedBy}} </td>
-          <td>{{j.createdAt | date}}</td>
-          <td class="text-center" style="cursor: pointer;"
-          (click)="showaCancelModal(j.jobID)" 
-          *ngIf="j.jobState === 0">
+  </div>
+  <!-- Loader -->
+  <app-loader [isLoading]="isLoading"></app-loader>
+  <!-- Loader -->
+  <!-- Not Found Record -->
+  <app-notfoundanyrecord *ngIf="!(items.length > 0) && !isLoading">
+  </app-notfoundanyrecord>
+  <!-- Not Found Record -->
+  <!-- Items -->
+  <table class="table table-hover" *ngIf="!isLoading && (items.length > 0)">
+    <thead>
+      <tr>
+        <th scope="col">Request for language</th>
+        <th scope="col">Request Type</th>
+        <th scope="col">Request State</th>
+        <th scope="col">Accepted By</th>
+        <th scope="col" class="text-center">Cancel</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-light" *ngFor="let j of items">
+        <th scope="row">
+          <div>
+            {{j.name}}
+          </div>
+          <div class="small text-muted">
+            <span>Requested Date: </span>{{j.createdAt | date}}
+          </div>
+        </th>
+        <td>
+          <app-jobtype [jobType]="j.jobType"></app-jobtype>
+          <div class="small text-muted mt-1" *ngIf="j.locationName">
+            <span>Location:</span> {{ j.locationName  }}
+          </div>
+        </td>
+        <td>
+          <app-coloredrow [jobState]="j.jobState"></app-coloredrow>
+          <div class="small text-muted mt-1">
+            <span><mark>Duration:</mark></span> {{ j.duration  }}
+          </div>
+        </td>
+        <td>
+          <div class="mb-1" *ngIf="j.acceptedBy">
+            {{j.acceptedBy}}
+          </div>
+          <div class="small text-muted" *ngIf="j.acceptedBy">
+            <span>Accepted at:</span> {{ j.acceptedAt | date  }} {{ j.acceptedAt | date:'shortTime'}}
+          </div>
+        </td>
+        <td class="text-center" style="cursor: pointer;" (click)="showaCancelModal(j.jobID)" *ngIf="j.jobState === 0">
           <i class="fas fa-power-off text-danger"></i></td>
-      </tbody>
-    </table>
-        <!-- Items -->
-        <!-- Pagination -->
-        <app-paginaton [pager]="pager" [isPaginationLoading]="isLoading" (nextPage)="getItems($event)"></app-paginaton>
-        <!-- Pagination -->
+    </tbody>
+  </table>
+  <!-- Items -->
+  <!-- Pagination -->
+  <app-paginaton [pager]="pager" [isPaginationLoading]="isLoading" (nextPage)="getItems($event)"></app-paginaton>
+  <!-- Pagination -->
 
-
-
-
-            <!-- Assignation Modal -->
-<div id="cancelModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-aside" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Cancel Request</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form #canceljobForm="ngForm" (ngSubmit)="canceljobForm.form.valid && onCancelSubmitForm(canceljobForm)">
-      <div class="modal-body">
-        <div *ngIf="!isCancelled" class="alert alert-warning">
-          Your request has been cancelled.
+  <!-- Cancel Modal -->
+  <div id="cancelModal" class="modal fixed-left fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-aside" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Cancel Request</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="form-group required">
-          <label>Please provide reason for cancellation of request:</label>
-          <input type="hidden" [(ngModel)]="job.jobID" name="jobID">
-          <input type="text" [(ngModel)]="job.cancellationReason" name="cancellationReason" required minlength="15"
-          class="form-control form-control-sm">
-        </div>
+        <form #canceljobForm="ngForm" (ngSubmit)="canceljobForm.form.valid && onCancelSubmitForm(canceljobForm)">
+          <div class="modal-body">
+            <div *ngIf="isCancelled" class="alert alert-warning">
+              Your request has been cancelled.
+            </div>
+            <div class="form-group required">
+              <label>Please provide reason for cancellation of request:</label>
+              <input type="hidden" [(ngModel)]="job.jobID" name="jobID">
+              <input type="text" [(ngModel)]="job.cancellationReason" name="cancellationReason" required minlength="15"
+                class="form-control form-control-sm">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" [disabled]="!canceljobForm.valid" class="btn btn-primary">
+              <span *ngIf="cancelIsLoading" class="spinner-border spinner-border-sm" role="status"
+                aria-hidden="true"></span>
+              <span *ngIf="!cancelIsLoading">Save changes</span>
+            </button>
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" [disabled]="!canceljobForm.valid" class="btn btn-primary">
-          <span *ngIf="cancelIsLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          <span *ngIf="!cancelIsLoading">Save changes</span>
-        </button>
-      </div>
-    </form>
-    </div>
-  </div> <!-- modal-bialog .// -->
-</div> <!-- modal.// -->
-<!-- Assignation Modal -->
+    </div> <!-- modal-bialog .// -->
+  </div> <!-- modal.// -->
+  <!-- Cancel Modal -->

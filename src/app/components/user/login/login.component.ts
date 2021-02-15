@@ -1,12 +1,11 @@
-import { UserDTO } from './../models/user';
-import { BaseCrudApi, BaseViewModel } from './../models/base-view-model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { LoginModel, UserService } from '../services/user.service';
 import { Router } from '@angular/router';
-import { delay } from 'rxjs/internal/operators/delay';
-import { TokenService } from '../services/token.service';
+import { BaseCrudApi, BaseViewModel } from 'src/app/models/BaseViewModel';
+import { UserDTO } from 'src/app/models/user';
+import { TokenService } from 'src/app/services/user/token.service';
+import { LoginModel, UserService } from 'src/app/services/user/users.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +25,7 @@ export class LoginComponent extends BaseCrudApi<UserDTO> implements OnInit {
     super();
     this.loginForm = this.formBuilder.group({
       UserName: new FormControl('', [Validators.required, Validators.email]),
-      Password: new FormControl('', [Validators.required,Validators.minLength(3)]),
+      Password: new FormControl('', [Validators.required]),
   });
 }
 
@@ -50,11 +49,10 @@ export class LoginComponent extends BaseCrudApi<UserDTO> implements OnInit {
     this.LoginModel = new LoginModel(this.loginForm.value);
     this.isLoading = true;
     this.userService.Login(this.LoginModel)
-    .pipe(delay(500))
     .subscribe((res: BaseViewModel<UserDTO>) => {
       if(res.isSuccess){
         this.tokenService.setUser(res.model!);
-        this.router.navigateByUrl('/Users');
+        this.router.navigateByUrl('/Dashboard');
       }else{
         this.isError = true;
         this.errorMessage = res.message;

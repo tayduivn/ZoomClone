@@ -1,11 +1,11 @@
 import { Router } from '@angular/router';
 import { MessageService } from './../../services/message.service';
-import { TokenService } from 'src/app/admin/services/token.service';
 import { ChatService, Message } from './../../services/chat.service';
 import { Component, OnInit, NgZone } from '@angular/core';
-import { BaseCrudApi } from 'src/app/admin/models/base-view-model';
 import { takeUntil } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TokenService } from 'src/app/services/user/token.service';
+import { BaseCrudApi } from 'src/app/models/BaseViewModel';
 
 @Component({
   selector: 'app-chat',
@@ -23,7 +23,8 @@ export class ChatComponent extends BaseCrudApi<Message> implements OnInit {
   ToUser: string = "";
 
   constructor(private chatService: ChatService,private ngZone: NgZone,
-    private tokenService: TokenService,private messageService: MessageService,private router: Router) { super(); }
+    private tokenService: TokenService,private messageService: MessageService,
+    private router: Router) { super(); }
 
   ngOnInit(): void {
     this.chatService.createConnection(this.tokenService.getUserName());

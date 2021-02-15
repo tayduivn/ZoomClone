@@ -27,8 +27,15 @@ export class SubscriptionsContainer{
     this.subs.forEach(s => s.unsubscribe());
   }
 }
+export enum Roles{
+  Administrator = 'Administrator',
+  Visitor = 'Visitor',
+  None = 'None'
+}
 @Directive()
-export class BaseCrudApi<T>{
+export abstract class BaseCrudApi<T>
+{
+  public role: Roles = Roles.None;
   public httpErrorResponse!: HttpErrorResponse;
   public unsubscribe$ = new Subject<void>();
   public isLoading: boolean = false;
@@ -48,5 +55,30 @@ export class BaseCrudApi<T>{
   }
   dispose(){
     this.subs.forEach(s => s.unsubscribe());
+  }
+  public runIT(): void{
+    this.myNumbers = [];
+    for(let page = this.pager.startPage;page <= this.pager.endPage;page++){
+      this.myNumbers.push(page);
+    }
+  }
+  public childNumber = 1;
+  public HandleError(error: HttpErrorResponse)
+  {
+    console.log(`${JSON.stringify(error.message)} ${JSON.stringify(error.error)}`);
+    this.isError = true;
+    this.errorMessage = `${error.message} ${error.error}`;
+    this.isLoading = false;
+    this.isSaved = false;
+    this.isSaving = false;
+  }
+  public HandleCompletion(isSavingParameter: boolean = false)
+  {
+    if(isSavingParameter)
+    {
+      this.isSaved = true;
+    }
+    this.isSaving = false;
+    this.isLoading = false;
   }
 }

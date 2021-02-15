@@ -1,5 +1,5 @@
-import { Pager } from './../../admin/models/base-view-model';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Pager } from 'src/app/models/BaseViewModel';
 
 @Component({
   selector: 'app-paginaton',
