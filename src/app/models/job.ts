@@ -14,6 +14,8 @@ export class Job {
     endDateTime!: Date;
     duration!: any;
     locationName!: string;
+    timeAgo!: string;
+    isPast = true;
 }
 
 export class OfferAnswerClass{

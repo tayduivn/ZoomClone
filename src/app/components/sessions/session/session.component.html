@@ -1,0 +1,29 @@
+<div class="container">
+  <!-- Loader -->
+  <app-loader [isLoading]="isLoading"></app-loader>
+  <!-- Loader -->
+  <div class="row justify-content-center" *ngIf="!isLoading && item">
+    <div class="col-lg-8 col-md-10 col-12">
+      <h5 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">
+          {{item?.name}}
+        </span>
+      </h5>
+      <ul class="list-unstyled mt-3">
+        <li class="text-muted ml-3"><i class="mdi mdi-circle-medium mr-2"></i><b>Translator: </b> {{item?.acceptedBy}}
+        </li>
+        <li class="text-muted ml-3"><i class="mdi mdi-circle-medium mr-2"></i><b>Request Type: </b>
+          <app-jobtype [jobType]="item.jobType"></app-jobtype>
+        </li>
+        <li class="text-muted ml-3"><i class="mdi mdi-circle-medium mr-2"></i><b>Requested Date:</b>
+          {{item?.createdAt | date}}</li>
+        <li class="text-muted ml-3"><i class="mdi mdi-circle-medium mr-2"></i><b>Duration: </b><u>{{ item?.duration  }}</u>
+        </li>
+      </ul>
+      <div class="mt-4">
+        <a href="#" class="btn btn-primary">Please wait . . .</a>
+      </div>
+    </div>
+    <!--end col-->
+  </div>
+  <!--end row-->
+</div>

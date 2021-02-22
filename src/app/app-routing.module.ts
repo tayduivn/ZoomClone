@@ -1,3 +1,4 @@
+import { PagenotfoundComponent } from './shared/pagenotfound/pagenotfound.component';
 import { CreatejobComponent } from './components/job/createjob/createjob.component';
 import { LanguagesComponent } from './components/languages/languages.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -19,13 +20,17 @@ import { HomeComponent } from './twilio/home/home.component';
 import { UserComponent } from './components/user/user/user.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { LogoutComponent } from './components/user/logout/logout.component';
+import { SessionComponent } from './components/sessions/session/session.component';
 
 const routes: Routes = [
   {
     path: '',
     component: SitelayoutComponent,
     children: [
-      { path: 'Dashboard', component: DashboardComponent },
+      {
+        path: 'Dashboard', component: DashboardComponent,
+        canActivate: [CanactiveguardserviceService]
+      },
       {
         path: 'Languages', component: LanguagesComponent,
         canActivate: [CanactiveguardserviceService],
@@ -43,13 +48,23 @@ const routes: Routes = [
         data: { allowedRoles: ['Administrator'] }
       },
       { path: 'Video', component: VideoComponent },
-      { path: 'TwilioHome', component: HomeComponent },
+      { path: 'VideoSession/:id', component: HomeComponent },
+      { path: 'Home', component: HomeComponent },
       {
         path: 'Sessions', component: SessionsComponent,
         canActivate: [CanactiveguardserviceService],
+        data: { allowedRoles: ['Administrator', 'Client', 'Translator' ] }
+      },
+      {
+        path: 'Session/:id', component: SessionComponent,
+        canActivate: [CanactiveguardserviceService],
         data: { allowedRoles: ['Administrator', 'Visitor'] }
       },
-      { path: 'GenerateRequest', component: CreatejobComponent },
+      {
+        path: 'GenerateRequest', component: CreatejobComponent,
+        canActivate: [CanactiveguardserviceService],
+        data: { allowedRoles: ['Administrator', 'Client'] }
+      },
       {
         path: 'Jobs',
         component: JobComponent,
@@ -60,7 +75,7 @@ const routes: Routes = [
   },
   { path: 'Login', component: LoginComponent },
   { path: 'Logout', component: LogoutComponent },
-  { path: '**', component: LogoutComponent }
+  { path: '**', component: PagenotfoundComponent }
 ];
 
 @NgModule({

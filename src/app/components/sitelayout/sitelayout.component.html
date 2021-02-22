@@ -50,7 +50,7 @@
               <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
               Users
             </a>
-            <a class="nav-link" routerLink="/Jobs">
+            <a class="nav-link" routerLink="/Jobs" *ngIf="role !== 'Client'">
               <div class="sb-nav-link-icon"><i class="fas fa-feather-alt"></i></div>
               <span *ngIf="role !== 'Administrator'">
                 Available Jobs
@@ -58,6 +58,10 @@
               <span *ngIf="role === 'Administrator'">
                 Jobs
               </span>
+            </a>
+            <a class="nav-link" routerLink="/GenerateRequest" *ngIf="role === 'Client'">
+              <div class="sb-nav-link-icon"><i class="fas fa-toolbox"></i></div>
+              Post a job
             </a>
           </div>
         </div>

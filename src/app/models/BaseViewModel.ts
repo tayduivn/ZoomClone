@@ -30,6 +30,8 @@ export class SubscriptionsContainer{
 export enum Roles{
   Administrator = 'Administrator',
   Visitor = 'Visitor',
+  Translator = 'Translator',
+  Client = 'Client',
   None = 'None'
 }
 @Directive()
@@ -44,6 +46,7 @@ export abstract class BaseCrudApi<T>
   public isSaved = false;
   public isSaving = false;
   public items: T[] = [];
+  public item!: T;
   public query: string = '';
   public pager: Pager = new Pager();
   public pageNo: number = 1;
@@ -80,5 +83,8 @@ export abstract class BaseCrudApi<T>
     }
     this.isSaving = false;
     this.isLoading = false;
+  }
+  ngOnDestroy(): void {
+    this.dispose();
   }
 }

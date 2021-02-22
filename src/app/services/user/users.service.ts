@@ -20,6 +20,12 @@ export class UserService {
     return this.http.get<BaseViewModel<UserViewModel>>(url);
   }
 
+  public GetRoles(): Observable<BaseViewModel<string>>
+  {
+    let url = `${environment.apiUrl}User/GetRoles`;
+    return this.http.get<BaseViewModel<string>>(url);
+  }
+
   public SearchUsers(firstname: string = ""): Observable<any[]>{
     let url = `${environment.apiUrl}User/SearchUsers?firstname=${firstname}`;
     let data: any[] = [];

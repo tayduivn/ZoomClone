@@ -1,0 +1,46 @@
+<div class="tr-job-posted section-padding">
+  <div class="container">
+    <div class="job-tab text-center">
+      <div class="tab-content text-left">
+        <div role="tabpanel" class="tab-pane fade active show" id="hot-jobs">
+          <div class="row">
+            <div class="col-md-6 col-lg-3" *ngFor="let j of _jobs">
+              <div class="job-item">
+                <div class="job-info" [ngStyle]="{'background-color': j.isPast ? 'rgba(0, 0, 0, 0.075)' : '#f0f9fd' }">
+                  <div class="company-logo">
+                    <h4>{{j.name}}</h4>
+                    <div class="small">
+                      <span><mark> Request Type: </mark>
+                        <app-jobtype [jobType]="j.jobType" class="pl-2" style="font-size: 0.8rem;">
+                        </app-jobtype>
+                      </span>
+                    </div>
+                  </div>
+                  <span class="tr-title">
+                    <span>{{ j.postedBy }}</span>
+                  </span>
+                  <ul class="tr-list job-meta mt-1">
+                    <li><span><i class="far fa-calendar-alt"></i></span>{{ j.createdAt | date }}</li>
+                    <li><span><i class="fas fa-clock"></i></span>{{j.duration}}</li>
+                    <li><span>
+                        <i *ngIf="j.jobState == 0" class="fas fa-lock-open"></i>
+                        <i *ngIf="j.jobState != 0" class="fas fa-lock"></i>
+                      </span>
+                      <app-coloredrow [jobState]="j.jobState"></app-coloredrow>
+                    </li>
+                  </ul>
+                  <div class="time">
+                    <button type="button" class="btn btn-primary mr-2" nz-popconfirm
+                      nzPopconfirmTitle="Are you sure you want to accept this request?" nzPopconfirmPlacement="bottom"
+                      (nzOnConfirm)="confirmAccept(j.jobID)">{{btnText}}</button>
+                    <span class="pull-right">Posted {{ j.timeAgo }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /.row -->
+        </div><!-- /.tab-pane -->
+      </div><!-- /.job-tab -->
+    </div><!-- /.container -->
+  </div>
+</div>

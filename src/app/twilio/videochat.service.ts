@@ -1,8 +1,9 @@
 import { connect, ConnectOptions, LocalTrack, Room } from 'twilio-video';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ReplaySubject , Observable } from 'rxjs';
+import { ReplaySubject , Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { TokenService } from '../services/user/token.service';
 
 interface AuthToken {
     token: string;
@@ -11,6 +12,7 @@ interface AuthToken {
 export interface NamedRoom {
     id: string;
     name: string;
+    username: string;
     maxParticipants?: number;
     participantCount: number;
 }
@@ -25,8 +27,9 @@ export class VideochatService {
   $roomsUpdated: Observable<boolean>;
 
   private roomBroadcast = new ReplaySubject<boolean>();
+  public startCountDown: Subject<boolean> = new Subject();
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient,private tokenService: TokenService) {
       this.$roomsUpdated = this.roomBroadcast.asObservable();
   }
 

@@ -55,6 +55,11 @@ export class CreatejobComponent extends BaseCrudApi<Language> implements OnInit,
   onSubmitForm(form: NgForm) {
     console.log(JSON.stringify(this.job));
     this.isSaving = true;
+
+    this.job.startDateTime = this.jobService.GetCorrectDateTime(this.job.startDateTime);
+    this.job.endDateTime = this.jobService.GetCorrectDateTime(this.job.endDateTime);
+    this.job.createdAt = this.jobService.GetCorrectDateTime(new Date());
+
     this.add = this.jobService.createJob(this.job)
       .subscribe(res => {
         if (res.isSuccess) {

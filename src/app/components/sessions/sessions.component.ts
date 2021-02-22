@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { BaseCrudApi } from 'src/app/models/BaseViewModel';
 import { TokenService } from 'src/app/services/user/token.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 declare var $: any;
 
 @Component({
@@ -24,13 +25,23 @@ export class SessionsComponent extends BaseCrudApi<Job> implements OnInit, OnDes
   isRightSideOpen = false;
   constructor(private jobService: JobService, private router: Router,
     private toastrService: ToastrService,
-    private tokenService: TokenService) {
+    private tokenService: TokenService,
+    private message: NzMessageService) {
     super();
     this.allowedRoles = this.tokenService.getUserRoles();
   }
 
   ngOnInit(): void {
     this.getItems();
+  }
+  navigateToSession(jobID = 0,endDateTime: any){
+    if(this.jobService.isAuthenticateToNavigate(endDateTime)){
+      this.router.navigateByUrl(`/VideoSession/${jobID}`);
+    }else{
+      this.message.create('error', "You cannot start the session now ...", {
+        nzDuration: 10000
+      });
+    }
   }
   onCancelSubmitForm(form: NgForm) {
     console.log(JSON.stringify(this.job));
@@ -91,14 +102,12 @@ export class SessionsComponent extends BaseCrudApi<Job> implements OnInit, OnDes
     this.query = '';
     this.getItems();
   }
-
   openRightSide(){
     this.isRightSideOpen = true;
   }
   closeRightSide(){
     this.isRightSideOpen = false;
   }
-
   ngOnDestroy(): void {
     this.dispose();
   }

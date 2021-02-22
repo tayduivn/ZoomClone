@@ -62,6 +62,10 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import { CoundownComponent } from './shared/coundown/coundown.component';
+import { SessionComponent } from './components/sessions/session/session.component';
+import { GridjobComponent } from './components/job/gridjob/gridjob.component';
+import { SessionchecktimePipe } from './pipes/sessionchecktime.pipe';
+import { PagenotfoundComponent } from './shared/pagenotfound/pagenotfound.component';
 
 
 
@@ -109,7 +113,11 @@ export function tokenGetter() {
     LogoutComponent,
     RegisterComponent,
     CustomregisterComponent,
-    CoundownComponent
+    CoundownComponent,
+    SessionComponent,
+    GridjobComponent,
+    SessionchecktimePipe,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule,

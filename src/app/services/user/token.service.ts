@@ -72,6 +72,7 @@ export class TokenService {
   if (!decodeToken) {
     return [];
   }
+  console.log(JSON.stringify(decodeToken));
   let array: string[] = [];
   let item = decodeToken['role'];
   let languageIds = decodeToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/streetaddress'];

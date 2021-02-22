@@ -21,6 +21,7 @@ export class RegisterDTO{
     public confirmPassword: string | undefined;
     public languageID: number[] = [];
     public phoneNumber!: string;
+    public roleName!: string;
 }
 export class UserViewModel{
     firstName: string | undefined;

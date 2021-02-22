@@ -19,6 +19,14 @@ export class SitelayoutComponent implements OnInit , AfterViewInit{
     allowedRoles.forEach(r => {
       if(r === Roles.Administrator){
         this.role = Roles.Administrator;
+      }else if(r === Roles.Translator){
+        this.role = Roles.Translator;
+      }else if(r === Roles.Client){
+        this.role = Roles.Client;
+      }else if(r === Roles.Visitor){
+        this.role = Roles.Visitor;
+      }else{
+        this.role = Roles.None;
       }
     });
   }

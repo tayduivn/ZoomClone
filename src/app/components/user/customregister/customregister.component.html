@@ -10,6 +10,18 @@
     [(ngModel)]="selectedItems">
     </ng-multiselect-dropdown>
   </div>
+  <div class="form-group">
+    <label for="exampleSelect1">Example select</label>
+    <select formControlName="roleName" 
+    [ngClass]="
+        { 'is-valid':getroleName?.valid && (getroleName?.touched) || (getroleName?.valid && submitted),
+        'is-invalid' : getroleName?.invalid && (getroleName?.touched) || (getroleName?.invalid && submitted) }"
+    class="form-control" id="exampleSelect1">
+      <option>Select role</option>
+      <option *ngFor="let r of items">{{r}}</option>
+    </select>
+    <div class="invalid-feedback" *ngIf="getroleName?.errors?.getroleName && (getroleName?.touched) || (getroleName?.errors?.required && submitted)">Role is required</div>
+  </div>
   <div class="form-group mt-2">
     <label>First Name:</label>
     <input class="form-control" formControlName="firstName" [ngClass]="

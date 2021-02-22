@@ -1,11 +1,13 @@
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RegisterDTO } from 'src/app/models/user';
 import { LanguageService } from 'src/app/services/language.service';
 import { UserService } from 'src/app/services/user/users.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BaseCrudApi } from 'src/app/models/BaseViewModel';
+import { TokenService } from 'src/app/services/user/token.service';
 declare var $: any;
 
 @Component({
@@ -13,7 +15,7 @@ declare var $: any;
   templateUrl: './customregister.component.html',
   styleUrls: ['./customregister.component.css']
 })
-export class CustomregisterComponent implements OnInit {
+export class CustomregisterComponent extends BaseCrudApi<string> implements OnInit, OnDestroy {
 
   registerForm!: FormGroup;
   newUser: RegisterDTO = new RegisterDTO();
@@ -31,23 +33,30 @@ export class CustomregisterComponent implements OnInit {
     private languageservice: LanguageService,
     private userService: UserService,
     private message: NzMessageService,
-    private formBuilder: FormBuilder) {
+    private tokenService: TokenService,
+    private formBuilder: FormBuilder) 
+    {
+    super();
+    this.allowedRoles = this.tokenService.getUserRoles();
+    this.getRolesFromServer();
     this.registerForm = this.formBuilder.group({
       firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
       username: new FormControl('', [Validators.required, Validators.minLength(3)]),
       phoneNumber: new FormControl('', [Validators.required]),
+      roleName: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(1)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(1)])
     });
   }
 
   ngOnInit(): void {
-    this.registerForm.valueChanges.subscribe(field => {
-      if (field.password !== field.confirmPassword) {
-        this.registerForm.controls.confirmPassword.setErrors({ mismatch: true });
-      }
-    });
+
+    this.add = this.registerForm.valueChanges.subscribe(field => {
+        if (field.password !== field.confirmPassword) {
+          this.registerForm.controls.confirmPassword.setErrors({ mismatch: true });
+        }
+      });
 
     this.languageservice.getAllLanguages().subscribe(res => {
       this.dropdownList = res;
@@ -105,6 +114,13 @@ export class CustomregisterComponent implements OnInit {
     $("#newUserModal").modal('hide');
   }
 
+  public getRolesFromServer()
+  {
+    this.add = this.userService.GetRoles().subscribe(res => {
+      this.items = res.listModel!
+    });
+  }
+
   get getFirstName() {
     return this.registerForm.get('firstName');
   }
@@ -122,5 +138,8 @@ export class CustomregisterComponent implements OnInit {
   }
   get getConfirmPassword() {
     return this.registerForm.get('confirmPassword');
+  }
+  get getroleName() {
+    return this.registerForm.get('roleName');
   }
 }

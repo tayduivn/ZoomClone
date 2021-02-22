@@ -24,6 +24,7 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
   keyword = "name";
   previousUserName = "";
   isAssignedSuccessfully = false;
+  isGrid = true;
   constructor(private jobService: JobService,private router: Router, private tokenService: TokenService,
     private userService: UserService,
     private message: NzMessageService,
@@ -34,11 +35,25 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
     this.allowedRoles.forEach(r => {
       if(r === Roles.Administrator){
         this.role = Roles.Administrator;
+      }else if(r === Roles.Translator){
+        this.role = Roles.Translator;
+      }else if(r === Roles.Client){
+        this.role = Roles.Client;
+      }else if(r === Roles.Visitor){
+        this.role = Roles.Visitor;
+      }else{
+        this.role = Roles.None;
       }
     });
   }
   ngOnInit(): void {
    this.getItems();
+  }
+  listView(){
+    this.isGrid = false;
+  }
+  gridView(){
+    this.isGrid = true;
   }
   getItems(page: number = 1){
     this.isLoading = true;
@@ -76,6 +91,7 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
   }
   onAcceptorSubmitForm(){
     this.isAcceptingLoading = true;
+    this.job.acceptedAt = this.jobService.GetCorrectDateTime(new Date());
     this.jobService.acceptJob(this.job)
     .subscribe(res => {
       if(res.isSuccess){
