@@ -24,7 +24,7 @@ export class LoginComponent extends BaseCrudApi<UserDTO> implements OnInit {
     private tokenService: TokenService) {
     super();
     this.loginForm = this.formBuilder.group({
-      UserName: new FormControl('', [Validators.required, Validators.email]),
+      UserName: new FormControl('', [Validators.required]),
       Password: new FormControl('', [Validators.required]),
   });
 }

@@ -27,3 +27,11 @@
   .modal.fixed-left .modal-dialog-aside{ margin-left:auto;  transform: translateX(100%); }
   .modal.fixed-right .modal-dialog-aside{ margin-right:auto; transform: translateX(-100%); }
   .modal.show .modal-dialog-aside{ transform: translateX(0);  }
+  .badge {
+    vertical-align: middle;
+    padding: 7px 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-radius: 30px;
+    font-size: 12px;
+}

@@ -42,6 +42,7 @@ export class SitelayoutComponent implements OnInit , AfterViewInit{
   }
 
   onToggle(){
+    console.log('toggle');
       $("#toggleme").toggleClass("sb-sidenav-toggled");
   }
 }

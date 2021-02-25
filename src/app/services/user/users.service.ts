@@ -58,9 +58,19 @@ export class UserService {
     return this.http.post<BaseViewModel<UserChangeViewModel>>(`${environment.apiUrl}User/ChangePassword`, model);
   }
 
+  public ResetPassword(model: UserChangeViewModel): Observable<BaseViewModel<UserChangeViewModel>>
+  {
+    return this.http.post<BaseViewModel<UserChangeViewModel>>(`${environment.apiUrl}User/ResetPassword`, model);
+  }
+
   public BlockedUSer(id: string): Observable<BaseViewModel<UserChangeViewModel>>
   {
     return this.http.get<BaseViewModel<UserChangeViewModel>>(`${environment.apiUrl}User/BlockedUser?Id=${id}`);
+  }
+
+  public RemoveUser(id: string): Observable<BaseViewModel<string>>
+  {
+    return this.http.get<BaseViewModel<string>>(`${environment.apiUrl}User/RemoveUser?Id=${id}`);
   }
 
 }

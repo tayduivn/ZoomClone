@@ -33,8 +33,12 @@ export class UserViewModel{
     languages: Language[] = [];
 }
 export class UserChangeViewModel{
+    public constructor(init?: Partial<UserChangeViewModel>){
+        Object.assign(this,init);
+    }
     id!: string;
     newPassword!: string;
+    oldPassword!: string;
 }
 export class UserRegistrationModel{
     public firstName: string | undefined;

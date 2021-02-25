@@ -1,5 +1,6 @@
 import { Component, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
+import { JobService } from 'src/app/services/job.service';
 
 @Component({
   selector: 'app-coundown',
@@ -8,19 +9,26 @@ import { Subscription, interval } from 'rxjs';
 })
 export class CoundownComponent implements OnDestroy {
 
+  constructor(private jobService: JobService){}
   private subscription!: Subscription;
+  private sessionID = 0;
 
   @Input() set SetTime(dd: any) 
   {
-    this.dDay = new Date(dd);
+    this.startDateTime = new Date(dd);
     this.subscription = interval(1000)
       .subscribe(x => 
       {
         this.getTimeDifference();
       });
   }
+  
+  @Input() set SessionID(sessionid: number)
+  {
+    this.sessionID = sessionid;
+  }
   public dateNow = new Date();
-  public dDay = new Date('2021-02-17 15:40:54.9300000');
+  public startDateTime = new Date('2021-02-17 15:40:54.9300000');
   milliSecondsInASecond = 1000;
   hoursInADay = 24;
   minutesInAnHour = 60;
@@ -33,7 +41,7 @@ export class CoundownComponent implements OnDestroy {
   public sessionDescription = "";
   public isShowDescription = false;
   private getTimeDifference() {
-    this.timeDifference = this.dDay.getTime() - new Date().getTime();
+    this.timeDifference = this.startDateTime.getTime() - new Date().getTime();
     this.allocateTimeUnits(this.timeDifference);
   }
   private allocateTimeUnits(timeDifference: any) {
@@ -45,6 +53,7 @@ export class CoundownComponent implements OnDestroy {
     {
       this.sessionDescription = "Your session has been started";
       this.isShowDescription = true;
+      this.jobService.startSessionNowNumber.next(this.sessionID);
       this.subscription.unsubscribe();
     }
   }

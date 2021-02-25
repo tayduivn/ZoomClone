@@ -28,6 +28,7 @@ export class CustomregisterComponent extends BaseCrudApi<string> implements OnIn
   dropdownList: any[] = [];
   selectedItems: any[] = [];
   dropdownSettings: IDropdownSettings = {};
+  isshowingLanguageDropDown = true;
 
   constructor(
     private languageservice: LanguageService,
@@ -76,11 +77,13 @@ export class CustomregisterComponent extends BaseCrudApi<string> implements OnIn
     if (this.registerForm.invalid) {
       return;
     }
-    if (this.selectedItems.length === 0) {
-      alert("Please select atleast one language");
-      return;
-    }
     this.newUser = new RegisterDTO(this.registerForm.value);
+    if(this.newUser.roleName !== 'Client'){
+      if (this.selectedItems.length === 0) {
+        alert("Please select atleast one language");
+        return;
+      }
+    }
     this.selectedItems.forEach(x => {
       this.newUser.languageID.push(x.languageID);
     });
@@ -109,18 +112,22 @@ export class CustomregisterComponent extends BaseCrudApi<string> implements OnIn
         this.newUser.languageID = [];
       });
   }
-
+  onRoleChange(event: any){
+    if(event.target.value === 'Client'){
+      this.isshowingLanguageDropDown = false;
+    }else{
+      this.isshowingLanguageDropDown = true;
+    }
+  }
   hideRegModal() {
     $("#newUserModal").modal('hide');
   }
-
   public getRolesFromServer()
   {
     this.add = this.userService.GetRoles().subscribe(res => {
       this.items = res.listModel!
     });
   }
-
   get getFirstName() {
     return this.registerForm.get('firstName');
   }

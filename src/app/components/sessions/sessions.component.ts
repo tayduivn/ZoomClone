@@ -23,6 +23,7 @@ export class SessionsComponent extends BaseCrudApi<Job> implements OnInit, OnDes
   cancelIsLoading = false;
   isCancelled = false;
   isRightSideOpen = false;
+  public sessionIDs: number[] = [];
   constructor(private jobService: JobService, private router: Router,
     private toastrService: ToastrService,
     private tokenService: TokenService,
@@ -33,15 +34,20 @@ export class SessionsComponent extends BaseCrudApi<Job> implements OnInit, OnDes
 
   ngOnInit(): void {
     this.getItems();
+    this.add = this.jobService.startSessionNowNumber.subscribe(res => {
+      this.sessionIDs.push(res);
+      console.log(this.sessionIDs.length);
+    })
   }
   navigateToSession(jobID = 0,endDateTime: any){
-    if(this.jobService.isAuthenticateToNavigate(endDateTime)){
-      this.router.navigateByUrl(`/VideoSession/${jobID}`);
-    }else{
-      this.message.create('error', "You cannot start the session now ...", {
-        nzDuration: 10000
-      });
-    }
+    this.router.navigateByUrl(`/VideoSession/${jobID}`);
+    // if(this.jobService.isAuthenticateToNavigate(endDateTime)){
+    //   this.router.navigateByUrl(`/VideoSession/${jobID}`);
+    // }else{
+    //   this.message.create('error', "You cannot start the session now ...", {
+    //     nzDuration: 10000
+    //   });
+    // }
   }
   onCancelSubmitForm(form: NgForm) {
     console.log(JSON.stringify(this.job));
@@ -79,7 +85,7 @@ export class SessionsComponent extends BaseCrudApi<Job> implements OnInit, OnDes
       .subscribe(res => {
         if (res.isSuccess) {
           this.items = res.listModel!,
-            this.pager = res.pager
+          this.pager = res.pager
         } else {
           this.isError = true;
           this.errorMessage = res.message;
@@ -110,5 +116,6 @@ export class SessionsComponent extends BaseCrudApi<Job> implements OnInit, OnDes
   }
   ngOnDestroy(): void {
     this.dispose();
+    //this.jobService.startSessionNowNumber.unsubscribe();
   }
 }

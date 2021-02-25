@@ -1,4 +1,4 @@
-.fixed-top, .sb-nav-fixed #layoutSidenav #layoutSidenav_nav, .sb-nav-fixed .sb-topnav {
+/* .fixed-top, .sb-nav-fixed #layoutSidenav #layoutSidenav_nav, .sb-nav-fixed .sb-topnav {
   position: fixed;
   top: 0;
   right: 0;
@@ -165,8 +165,8 @@
 .sb-sidenav .sb-sidenav-menu .nav .nav-link {
   display: flex;
   align-items: center;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 1.00rem;
+  padding-bottom: 1.00rem;
   position: relative;
 }
 .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
@@ -217,9 +217,9 @@
 .sb-sidenav-dark .sb-sidenav-footer {
   background-color: #343a40;
 }
-
+*/
 .sb-sidenav-light {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   color: #212529;
 }
 .sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {

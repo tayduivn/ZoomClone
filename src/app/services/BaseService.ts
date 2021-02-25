@@ -10,8 +10,10 @@ export class BaseService {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     } else if (error instanceof TypeError) {
       errorMessage = `Error: ${error.name}\nMessage: ${error.message}`;
+    }else{
+      errorMessage = error?.message ?? "";
+      errorMessage += " " + error?.error ?? "";
     }
-    console.error(errorMessage);
     return throwError(errorMessage);
   }
   public getServerErrorMessage(error: HttpErrorResponse): string {

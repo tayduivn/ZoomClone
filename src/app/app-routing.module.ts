@@ -1,3 +1,4 @@
+import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 import { PagenotfoundComponent } from './shared/pagenotfound/pagenotfound.component';
 import { CreatejobComponent } from './components/job/createjob/createjob.component';
 import { LanguagesComponent } from './components/languages/languages.component';
@@ -64,6 +65,11 @@ const routes: Routes = [
         path: 'GenerateRequest', component: CreatejobComponent,
         canActivate: [CanactiveguardserviceService],
         data: { allowedRoles: ['Administrator', 'Client'] }
+      },
+      {
+        path: 'ResetPassword', component: ResetpasswordComponent,
+        canActivate: [CanactiveguardserviceService],
+        data: { allowedRoles: ['Administrator', 'Client', 'Translator'] }
       },
       {
         path: 'Jobs',

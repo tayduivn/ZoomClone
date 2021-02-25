@@ -34,20 +34,13 @@
               <div class="job-info" [ngStyle]="{'background-color': j.isPast ? 'rgba(0, 0, 0, 0.075)' : '#f0f9fd' }">
                 <div class="company-logo">
                   <h4>{{j.name}}</h4>
-                  <div class="small" *ngIf="!(j?.startDateTime | sessionchecktime)">
+                  <div class="small" *ngIf="(j?.startDateTime | sessionchecktime)">
                     <u>
                       <span class="pr-1"><mark>Time Left: </mark>
-                        <app-coundown *ngIf="j" [SetTime]="j?.startDateTime">
+                        <app-coundown *ngIf="j" [SetTime]="j?.startDateTime" [SessionID]="j.jobID">
                         </app-coundown>
                       </span>
                     </u>
-                  </div>
-                  <div class="small"
-                    *ngIf="!(j?.endDateTime | sessionchecktime) && (j?.startDateTime | sessionchecktime)">
-                    <span class="text-success">Your session time has been started.</span>
-                  </div>
-                  <div class="small" *ngIf="(j?.endDateTime | sessionchecktime)">
-                    <span class="text-warning">Your session has been completed.</span>
                   </div>
                 </div>
                 <span class="tr-title">
@@ -65,18 +58,19 @@
                   </li>
                 </ul>
                 <div class="time">
-                  <button [disabled]="!(!(j?.endDateTime | sessionchecktime) && (j?.startDateTime | sessionchecktime))"
+                  <button *ngIf="(sessionIDs.includes(j.jobID))" (click)="navigateToSession(j.jobID,j.endDateTime)" type="button" class="btn btn-primary">
+                    Start Session
+                  </button>
+                  <button *ngIf="!(sessionIDs.includes(j.jobID))" 
+                  [disabled]="(!(j?.startDateTime | sessionchecktime) === false)"
                     type="button" class="btn btn-primary" (click)="navigateToSession(j.jobID,j.endDateTime)">
                     <ng-container
-                      *ngIf="(!(j?.endDateTime | sessionchecktime) && (j?.startDateTime | sessionchecktime))">
+                      *ngIf="((j?.startDateTime | sessionchecktime) === false)">
                       Start Session
                     </ng-container>
                     <ng-container
-                      *ngIf="!(j?.startDateTime | sessionchecktime)">
+                      *ngIf="((j?.startDateTime | sessionchecktime) === true)">
                       Please wait...
-                    </ng-container>
-                    <ng-container *ngIf="(j?.endDateTime | sessionchecktime)">
-                      Session Completed
                     </ng-container>
                   </button>
                   <span class="pull-right"></span>

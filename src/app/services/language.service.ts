@@ -103,4 +103,8 @@ export class LanguageService {
     let url = `${environment.apiUrl}Language/Create`;
     return this.http.post<BaseViewModel<Language>>(url, language);
   }
+  public removeLanguage(languageID: number): Observable<BaseViewModel<string>> {
+    let url = `${environment.apiUrl}Language/RemoveLanguage?languageID=${languageID}`;
+    return this.http.get<BaseViewModel<string>>(url);
+  }
 }

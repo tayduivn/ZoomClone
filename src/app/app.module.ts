@@ -66,6 +66,7 @@ import { SessionComponent } from './components/sessions/session/session.componen
 import { GridjobComponent } from './components/job/gridjob/gridjob.component';
 import { SessionchecktimePipe } from './pipes/sessionchecktime.pipe';
 import { PagenotfoundComponent } from './shared/pagenotfound/pagenotfound.component';
+import { ResetpasswordComponent } from './components/resetpassword/resetpassword.component';
 
 
 
@@ -117,7 +118,8 @@ export function tokenGetter() {
     SessionComponent,
     GridjobComponent,
     SessionchecktimePipe,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+    ResetpasswordComponent
   ],
   imports: [
     BrowserModule,

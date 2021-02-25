@@ -1,7 +1,8 @@
 <div class="container-fluid mt-2" style="height: 100%;">
   <div class="row mb-2">
     <div class="col-md-4">
-      <span class="pr-2 ml-5 mr-2" style="display: inline-block;border-right: 1px solid #593196;">
+      <span class="pr-2 mr-2" [ngClass]="(role === 'Administrator') ? 'ml-3' : 'ml-5'" style="display: inline-block;border-right: 1px solid #593196;">
+        <a class="btn btn-primary" routerLink="/GenerateRequest" *ngIf="role === 'Administrator'">Generate Request</a>
       </span>
       <span class="badge badge-primary">Total: {{pager.totalItems}}</span>
     </div>
@@ -127,8 +128,9 @@
               (click)="showassignationModal(j.jobID,j.acceptedBy)"></i>
           </td>
 
-          <td class="text-center" *ngIf="role === 'Administrator'">
-            <i class="fas fa-times text-danger"></i>
+          <td class="text-center" *ngIf="role === 'Administrator'" style="cursor: pointer">
+            <i class="fas fa-times text-danger"  nz-popconfirm nzPopconfirmTitle="Are you sure you want to reject this request?"
+            nzPopconfirmPlacement="bottom" (nzOnConfirm)="confirmRejection(j.jobID)"></i>
           </td>
 
         </tr>

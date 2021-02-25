@@ -27,22 +27,22 @@ export class SessionComponent extends BaseCrudApi<Job> implements OnInit, OnDest
   }
 
 
-  isDisable = true;
+  //isDisable = true;
   getItem() {
     this.isLoading = true;
     this.add = this.jobService.getMyJob(this.SessionID).subscribe(res => {
       if (res.isSuccess) {
         this.item = res.model!;
-        this.isDisable = new Date(this.item.endDateTime) < new Date(Date.now());
+        // this.isDisable = new Date(this.item.endDateTime) < new Date(Date.now());
         console.log(JSON.stringify(this.item));
-        if (!this.jobService.isAuthenticateToNavigate(this.item.endDateTime)) {
-          this.router.navigateByUrl("/Logout");
-        }
+        // if (!this.jobService.isAuthenticateToNavigate(this.item.endDateTime)) {
+        //   this.router.navigateByUrl("/Logout");
+        // }
       } else {
         this.message.create('error', res.message?.toString()!, {
           nzDuration: 10000
         });
-        this.router.navigateByUrl("/Logout");
+        //this.router.navigateByUrl("/Logout");
       }
     },
       (error: HttpErrorResponse) => {

@@ -138,14 +138,14 @@ export class HomeComponent extends BaseCrudApi<Job> implements OnInit, OnDestroy
             }
             console.log(this.username);
             //this.isDisable = new Date(this.item.endDateTime) < new Date(Date.now());
-            if (!this.jobService.isAuthenticateToNavigate(this.item.endDateTime)) {
-              this.router.navigateByUrl("/Logout");
-            }
-          } else {
-            this.message.create('error', res.message?.toString()!, {
-              nzDuration: 10000
-            });
-            this.router.navigateByUrl("/Logout");
+        //     if (!this.jobService.isAuthenticateToNavigate(this.item.endDateTime)) {
+        //       this.router.navigateByUrl("/Logout");
+        //     }
+        //   } else {
+        //     this.message.create('error', res.message?.toString()!, {
+        //       nzDuration: 10000
+        //     });
+        //     this.router.navigateByUrl("/Logout");
           }
         },
           (error: any) => {

@@ -1,5 +1,5 @@
 import { Job } from './../models/job';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
@@ -12,54 +12,61 @@ import { BaseService } from './BaseService';
   providedIn: 'root'
 })
 export class JobService extends BaseService {
+
+  public startSessionNowNumber: BehaviorSubject<number> = new BehaviorSubject(0);
+
   constructor(private http: HttpClient, private tokenService: TokenService) { super(); }
+
+
 
   public getJobs(page: number = 1, query: string = ''): Observable<BaseViewModel<Job>> {
     let url = `${environment.apiUrl}Job/GetJobs?page=${page}&query=${query}`;
     return this.http.get<BaseViewModel<Job>>(url)
       .pipe(
         map(res => {
-          res.listModel?.forEach(j => {
-            j.duration = this.GetDuration(j.startDateTime, j.endDateTime);
-          })
+            res.listModel?.forEach(j => {
+              j.duration = this.GetDuration(j.startDateTime, j.endDateTime);
+            })
           return res;
         }),
         retryWhen(notifier => notifier.pipe(
           delay(3000),
           scan((retryCount) => {
-            if (retryCount >= 5) {
+            if (retryCount >= 2) {
               throw notifier;
             } else {
               retryCount++;
-              console.log(`Retrying Attempts: ${retryCount}`);
+              console.log(`%cRetrying Attempts: ${retryCount}`,'color: yellow');
               return retryCount;
             }
           }, 0)
-        ))
+        )),
+        catchError(err => this.handleError(err))
       );
   }
-
   public getMyJobs(page: number = 1, query: string = ''): Observable<BaseViewModel<Job>> {
     let url = `${environment.apiUrl}Job/GetMyJobs?page=${page}&query=${query}`;
     return this.http.get<BaseViewModel<Job>>(url).pipe(
       map(res => {
         res.listModel?.forEach(j => {
-          if (j.acceptedBy === this.tokenService.getUserName()) {
+          if (j?.acceptedBy === this.tokenService.getUserName()) {
             j.acceptedBy = "You"
           }
-          j.duration = this.GetDuration(j.startDateTime, j.endDateTime);
-          j!.isPast = new Date(j.endDateTime) < new Date(Date.now());
+          if (j.duration) {
+            j.duration = this.GetDuration(j?.startDateTime, j?.endDateTime);
+            j.isPast = new Date(j.endDateTime) < new Date(Date.now());
+          }
         });
         return res;
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
-
   public getMyJob(jobID: number = 0): Observable<BaseViewModel<Job>> {
     let url = `${environment.apiUrl}Job/GetMyJob?jobID=${jobID}`;
     return this.http.get<BaseViewModel<Job>>(url).pipe(
       map(res => {
-        if(res.model != null){
+        if (res.model != null) {
           res.model!.duration = this.GetDuration(res.model?.startDateTime!, res?.model?.endDateTime!);
         }
         return res;
@@ -67,7 +74,6 @@ export class JobService extends BaseService {
       catchError(err => this.handleError(err))
     );
   }
-
   public createJob(job: Job): Observable<BaseViewModel<Job>> {
     let url = `${environment.apiUrl}Job/Create`;
     job.postedBy = this.tokenService.getUserName();
@@ -85,6 +91,10 @@ export class JobService extends BaseService {
   public cancelJob(job: Job): Observable<BaseViewModel<Job>> {
     let url = `${environment.apiUrl}Job/CancelJob`;
     return this.http.post<BaseViewModel<Job>>(url, job);
+  }
+  public rejectJob(jobID: number): Observable<BaseViewModel<Job>> {
+    let url = `${environment.apiUrl}Job/RejectJob?jobID=${jobID}`;
+    return this.http.get<BaseViewModel<Job>>(url);
   }
   public getIceServers(): Observable<RTCIceServer[] | undefined> {
     let url = `${environment.apiUrl}Notification/Get`;
@@ -118,8 +128,7 @@ export class JobService extends BaseService {
     }
     return `${hours} ${hr} & ${minutes} ${mint}`;
   }
-  public GetCorrectDateTime(dateTime: Date): Date
-  {
+  public GetCorrectDateTime(dateTime: Date): Date {
     var DateTime = new Date(dateTime.toString());
     var timeZoneDifference_s = (DateTime.getTimezoneOffset() / 60) * -1;
     DateTime.setTime(DateTime.getTime() + (timeZoneDifference_s * 60) * 60 * 1000);

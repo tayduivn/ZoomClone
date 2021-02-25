@@ -98,6 +98,7 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
         // Make notification to user for saving data
         this.isAccepted = true;
         this.message.success(`Request accepted successfully.`);
+        this.getItems();
       }else{
         this.message.error(`${res.message}`);
       }
@@ -114,7 +115,6 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
     () => {
       this.isAcceptingLoading = false;
       //$('#modal_aside_left').modal('toggle'); //or  $('#IDModal').modal('hide');
-      this.getItems();
     });
   }
   onAssignationSubmitForm(form: NgForm){
@@ -152,6 +152,20 @@ export class JobComponent extends BaseCrudApi<Job> implements OnInit , OnDestroy
     this.isAccepted = false;
     this.job.jobID = jobid;
     this.onAcceptorSubmitForm();
+  }
+  confirmRejection(jobid: number){
+    this.add = this.jobService.rejectJob(jobid).subscribe(res => {
+      if(res.isSuccess){
+        this.message.success(`Request rejected successfully.`);
+      }else{
+        this.message.error(`${res.message}`);
+      }
+    },err => {
+      this.message.error(`Something bad happen`);
+    },
+    ()=> {
+      this.getItems();
+    })
   }
   showassignationModal(jobid: number, previousAcceptedBy: string){
     this.isAssignedSuccessfully = false;

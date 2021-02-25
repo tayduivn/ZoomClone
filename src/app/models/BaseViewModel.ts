@@ -68,7 +68,7 @@ export abstract class BaseCrudApi<T>
   public childNumber = 1;
   public HandleError(error: HttpErrorResponse)
   {
-    console.log(`${JSON.stringify(error.message)} ${JSON.stringify(error.error)}`);
+    console.log(`%c${JSON.stringify(error.message)} ${JSON.stringify(error)}`,'color:red;');
     this.isError = true;
     this.errorMessage = `${error.message} ${error.error}`;
     this.isLoading = false;

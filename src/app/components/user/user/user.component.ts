@@ -35,8 +35,9 @@ export class UserComponent extends BaseCrudApi<UserViewModel> implements OnInit 
   }
 
   getItems(page: number = 1){
+    this.childNumber = page;
     this.isLoading = true;
-    this.add = this.userService.GetUsers(page,this.query)
+    this.add = this.userService.GetUsers(this.childNumber,this.query)
     .subscribe(res => {
       if(res.isSuccess){
         this.items = res.listModel!,
@@ -105,6 +106,19 @@ export class UserComponent extends BaseCrudApi<UserViewModel> implements OnInit 
         this.message.error(`${res.message}`);
       }
     });
+  }
+  confirmRemoved(id: any): void {
+    this.userService.RemoveUser(id).subscribe(res => {
+      if(res.isSuccess){
+        this.message.success(`User has been removed successfully.`);
+      }else{
+        this.message.error(`${res.message}`);
+      }
+    },(error: any) => {
+      this.message.error(`Opps! Something went wrong`);
+    },() => {
+      this.getItems(this.childNumber);
+    })
   }
   hideModal()
   {

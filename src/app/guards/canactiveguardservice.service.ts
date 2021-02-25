@@ -19,7 +19,7 @@ export class CanactiveguardserviceService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
 
     let allowedRoles = route.data.allowedRoles;
-    console.log(`Allowed Roles of ${route.routeConfig?.component?.name} : ${JSON.stringify(allowedRoles)}`);
+    console.log(`%cAllowed Roles of ${route.routeConfig?.component?.name} : ${JSON.stringify(allowedRoles)}`,'color: #13b955');
 
     if(!this.tokenService.isAuthorized(allowedRoles))
     {

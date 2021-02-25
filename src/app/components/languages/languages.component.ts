@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { BaseCrudApi } from 'src/app/models/BaseViewModel';
 import { TokenService } from 'src/app/services/user/token.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 declare var $: any;
 
 @Component({
@@ -18,11 +19,15 @@ declare var $: any;
 export class LanguagesComponent extends BaseCrudApi<Language> implements OnInit , OnDestroy {
 
   language: Language = new Language();
+  totalItems = "";
 
 
-  constructor(private languageServices: LanguageService,private router: Router, 
+  constructor(
+    private languageServices: LanguageService,
+    private router: Router, 
     private toastrService: ToastrService,
-    private tokenService: TokenService) 
+    private tokenService: TokenService,
+    private message: NzMessageService) 
     { 
       super();
       this.allowedRoles = this.tokenService.getUserRoles();
@@ -75,7 +80,8 @@ export class LanguagesComponent extends BaseCrudApi<Language> implements OnInit 
     .subscribe(res => {
       if(res.isSuccess){
         this.items = res.listModel!,
-        this.pager = res.pager
+        this.pager = res.pager!
+        this.totalItems = res.message!;
       }else{
         this.isError = true;
         this.errorMessage = res.message;
@@ -100,5 +106,17 @@ export class LanguagesComponent extends BaseCrudApi<Language> implements OnInit 
   }
   ngOnDestroy(): void {
     this.dispose();
+  }
+  confirmRemoved(id: any){
+    if(confirm('Are you sure you want to delete this language ?')){
+      console.log(`%c${id}`,'color:green;');
+      this.add = this.languageServices.removeLanguage(id).subscribe(res => {
+        if(res.isSuccess) {
+          this.message.success(`Language removed successfully.`);
+        }else{
+          this.message.error(`Opps! something bad happen.`);
+        }
+      })
+    }
   }
 }

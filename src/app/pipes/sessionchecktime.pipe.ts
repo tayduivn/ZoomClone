@@ -12,7 +12,7 @@ export class SessionchecktimePipe implements PipeTransform {
   {
     let timeDifference: any = new Date(value).getTime() - new Date().getTime();
     let secondsToDday: any = Math.floor((timeDifference) / (this.milliSecondsInASecond) % this.SecondsInAMinute);
-    return (secondsToDday > 0) ? false : true;
+    return (secondsToDday > 0) ? true : false;
   }
 
 }

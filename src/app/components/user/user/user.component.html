@@ -36,18 +36,22 @@
             <div class="card card-body">
               <span class="side-stick"></span>
               <h5 class="note-title text-truncate w-75 mb-0">{{u.firstName}}
-                {{u.lastName}}<i class="point fa fa-circle ml-1 font-10"></i></h5>
-              <p class="note-date font-12 text-muted">{{u.phoneNumber}}</p>
+                {{u.lastName}}</h5>
+                <!-- <i class="point fa fa-circle ml-1 font-10"></i> -->
+              <p class="note-date font-12 text-muted">{{ u.phoneNumber === null ? 'N/A' : u.phoneNumber }}</p>
               <div class="note-content">
                 <p class="note-inner-content text-muted">
-                  <span class="badge text-light" style="background-color: #8a6eb5;">Language:</span> {{u.languages[0]?.name!}}
+                  <span class="badge text-light" style="background-color: #8a6eb5;">Languages:</span> 
+                  {{u.languages[0]?.name!}}
                   {{u.languages[1]?.name!}}
                   {{u.languages[2]?.name!}}
                 </p>
               </div>
               <div class="d-flex align-items-center">
-                <span class="mr-1"><i class="fa fa-star favourite-note"></i></span>
-                <span class="mr-1"><i class="fa fa-trash remove-note"></i></span>
+                <span style="cursor: pointer;" class="mr-1" nz-popconfirm
+                nzPopconfirmTitle="Are you sure you want to remove this user?"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="confirmRemoved(u.id)"><i class="fa fa-trash remove-note"></i></span>
                 <div class="ml-auto">
                   <div class="category-selector btn-group">
                     <a class="nav-link dropdown-toggle category-dropdown label-group p-0" data-toggle="dropdown" href="#"
@@ -69,10 +73,6 @@
                       <button (click)="onChangePassword(u.id)" class="note-social badge-group-item badge-social dropdown-item position-relative " type="button">
                         <i class="mdi mdi-checkbox-blank-circle-outline mr-1"></i><i class="fas fa-key text-success mr-2"></i>Change password
                     </button>
-                      <a class="note-important badge-group-item badge-important dropdown-item position-relative"
-                        href="javascript:void(0);">
-                        <i class="mdi mdi-checkbox-blank-circle-outline mr-1"></i> <i class="fas fa-tools text-warning mr-2"></i>Settings
-                      </a>
                     </div>
                   </div>
                 </div>

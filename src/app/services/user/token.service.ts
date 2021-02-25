@@ -72,11 +72,11 @@ export class TokenService {
   if (!decodeToken) {
     return [];
   }
-  console.log(JSON.stringify(decodeToken));
+  console.log(`%c${JSON.stringify(decodeToken)}`,'color:#009cdc;');
   let array: string[] = [];
   let item = decodeToken['role'];
-  let languageIds = decodeToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/streetaddress'];
-  console.log(JSON.stringify(languageIds));
+  // let languageIds = decodeToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/streetaddress'];
+  // console.log(JSON.stringify(languageIds));
   if(Array.isArray(item)){
     item.forEach(e => {
       array.push(e);
